@@ -137,51 +137,43 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     constructor(private zone: NgZone) {}
 
     ngAfterViewInit() {
-        /*this.paginationSubscription = this.onBookReady.asObservable()
-            .subscribe(() => {
-                if (this.enablePagination) {
-                    this.zone.runOutsideAngular(() => {
-                        this.epub.generatePagination()
-                            .then((pages: EpubPage[]) => {
-                                this.zone.run(() => {
-                                    this.onPagination.next(pages);
-                                });
-                            })
-                            .catch(() => {
-                                this.zone.run(() => {
-                                    this.onError.emit(EpubError.PAGINATION);
-                                });
-                            });
-                    });
-                }
-            });
         this.linkSubscription = this._link.asObservable()
             .filter(link => link != null)
             .subscribe(link => {
                 this.initEpub({
                     bookPath: link
                 });
-            });*/
+            });
     }
 
     private initEpub = (properties: object) => {
         this.destroyEpub();
         this.epub = ePub(properties);
         this.epub.renderTo('angularEpubViewerComponent');
-        /*this.epub.on('book:ready', () => {
-            this.onBookReady.next(null);
+        this.epub.on('book:ready', () => {
+            this.onDocumentReady.next(null);
+            if (this.autoPagination) {
+                this.computePagination();
+            }
+            if (this.autoMetadata) {
+                this.loadMetadata();
+            }
+            if (this.autoTOC) {
+                this.loadTOC();
+            }
         });
         this.epub.on('renderer:chapterUnloaded', () => {
             this.onChapterUnloaded.next(null);
         });
         this.epub.on('renderer:chapterDisplayed', chapter => {
-            this.onChapterDisplayed.next(null);
-        });
-        this.epub.on('renderer:visibleRangeChanged', () => {
-            // renderer:locationChanged is a part of this event
-
+            //this.onChapterDisplayed.next(null);
         });
         this.epub.on('renderer:resized', () => {
+            console.log('resized');
+        });
+        /*
+        this.epub.on('renderer:visibleRangeChanged', () => {
+            // renderer:locationChanged is a part of this event
 
         });*/
     };
@@ -272,21 +264,57 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Calculates pagination as output event
      */
     computePagination() {
-
+        this.zone.runOutsideAngular(() => {
+            this.epub.generatePagination()
+                .then((pages: EpubPage[]) => {
+                    this.zone.run(() => {
+                        this.onPaginationComputed.next(pages);
+                    });
+                })
+                .catch(() => {
+                    this.zone.run(() => {
+                        this.onErrorOccurred.emit(EpubError.PAGINATION);
+                    });
+                });
+        });
     }
 
     /**
      * Loads metadata as output event
      */
     loadMetadata() {
-        //Observable.fromPromise(this.epub.getMetadata());
+        this.zone.runOutsideAngular(() => {
+            this.epub.getMetadata()
+                .then((metadata: EpubMetadata) => {
+                    this.zone.run(() => {
+                        this.onMetadataLoaded.next(metadata);
+                    });
+                })
+                .catch(() => {
+                    this.zone.run(() => {
+                        this.onErrorOccurred.emit(EpubError.METADATA);
+                    });
+                });
+        });
     }
 
     /**
      * Loads table of contents as output event
      */
     loadTOC() {
-        //Observable.fromPromise(this.epub.getToc());
+        this.zone.runOutsideAngular(() => {
+            this.epub.getToc()
+                .then((chapters: EpubChapter[]) => {
+                    this.zone.run(() => {
+                        this.onTOCLoaded.next(chapters);
+                    });
+                })
+                .catch(() => {
+                    this.zone.run(() => {
+                        this.onErrorOccurred.emit(EpubError.TOC);
+                    });
+                });
+        });
     }
 
     private destroyEpub() {

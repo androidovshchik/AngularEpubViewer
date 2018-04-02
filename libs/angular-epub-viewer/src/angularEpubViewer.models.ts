@@ -1,6 +1,7 @@
 export interface EpubLocation {
 
 }
+
 export interface EpubChapter {
     cfi: string,
     href: string,
@@ -8,17 +9,35 @@ export interface EpubChapter {
     spinePos: number,
     subitems: any[]
 }
+
 export interface EpubPage {
     cfi: string,
     page: number
 }
+
 export interface EpubSearchResult {
 
 }
-export interface EpubMetadata {
 
+export interface EpubMetadata {
+    bookTitle: string,
+    creator: string,
+    description: string,
+    direction: any,
+    identifier: string,
+    language: string,
+    layout: string,
+    modified_date: string,
+    orientation: string,
+    pubdate: string,
+    publisher: string,
+    rights: string,
+    spread: string
 }
+
 export enum EpubError {
     OPEN_FILE,
-    PAGINATION
+    PAGINATION,
+    METADATA,
+    TOC
 }
