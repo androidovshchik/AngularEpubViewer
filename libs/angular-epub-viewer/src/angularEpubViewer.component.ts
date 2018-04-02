@@ -65,17 +65,17 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     @Input()
     padding: string = null;
     /**
-     * Enables auto calculate of pagination after loading document or changes of viewport size
+     * Enables auto calculate of pagination after document is ready or viewport has been changed
      */
     @Input()
     autoPagination: boolean = false;
     /**
-     * Enables auto loading of metadata after loading document
+     * Enables auto loading of metadata after document is ready
      */
     @Input()
     autoMetadata: boolean = false;
     /**
-     * Enables auto loading of table of contents after loading document
+     * Enables auto loading of table of contents after document is ready
      */
     @Input()
     autoTOC: boolean = false;
@@ -96,6 +96,11 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     @Output('onChapterDisplayed')
     onChapterDisplayed: EventEmitter<EpubChapter> = new EventEmitter<EpubChapter>();
     /**
+     * Get event about the current location
+     */
+    @Output('onLocationFound')
+    onLocationFound: EventEmitter<EpubLocation> = new EventEmitter<EpubLocation>();
+    /**
      * Get event about search results
      */
     @Output('onSearchFinished')
@@ -105,11 +110,6 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      */
     @Output('onPaginationComputed')
     onPaginationComputed: EventEmitter<EpubPage[]> = new EventEmitter<EpubPage[]>();
-    /**
-     * Get event about the current location
-     */
-    @Output('onLocationFound')
-    onLocationFound: EventEmitter<EpubLocation> = new EventEmitter<EpubLocation>();
     /**
      * Get event about metadata
      */

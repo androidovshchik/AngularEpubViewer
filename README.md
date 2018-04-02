@@ -132,9 +132,9 @@ Input parameters:
 | Signature | Default value | Short Description |
 | :------------- |:-------------|:-------------|
 | `padding: string` | `'16px'` | Root container's padding in px, em, etc |
-| `autoPagination: boolean` | `false` | Enables auto calculate of pagination after loading document or changes of viewport size |
-| `autoMetadata: boolean` | `false` | Enables auto loading of metadata after loading document |
-| `autoTOC: boolean` | `false` | Enables auto loading of table of contents after loading document |
+| `autoPagination: boolean` | `false` | Enables auto calculate of pagination after document is ready or viewport has been changed |
+| `autoMetadata: boolean` | `false` | Enables auto loading of metadata after document is ready |
+| `autoTOC: boolean` | `false` | Enables auto loading of table of contents after document is ready |
 
 Output events:
 
@@ -143,9 +143,9 @@ Output events:
 | `onDocumentReady: EventEmitter<void>` | Get event when document is loaded |
 | `onChapterUnloaded: EventEmitter<void>` | Get event when chapter is unloaded  |
 | `onChapterDisplayed: EventEmitter<EpubChapter>` | Get event when chapter is displayed  |
+| `onLocationFound: EventEmitter<EpubLocation>` | Get event about the current location |
 | `onSearchFinished: EventEmitter<EpubSearchResult[]>` | Get event about search results  |
 | `onPaginationComputed: EventEmitter<EpubPage[]>` | Get event about pagination |
-| `onLocationFound: EventEmitter<EpubLocation>` | Get event about the current location |
 | `onMetadataLoaded: EventEmitter<EpubMetadata>` | Get event about metadata |
 | `onTOCLoaded: EventEmitter<EpubChapter[]>` | Get event about table of contents |
 | `onErrorOccurred: EventEmitter<EpubError>` | Get event when any error occurred |
