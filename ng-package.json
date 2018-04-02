@@ -1,6 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/package.schema.json",
+  "whitelistedNonPeerDependencies": ["."],
   "lib": {
-    "entryFile": "public_api.ts"
+    "entryFile": "libs/angular-epub-viewer/src/public_api.ts"
   }
 }

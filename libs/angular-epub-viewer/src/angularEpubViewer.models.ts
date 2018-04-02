@@ -1,13 +1,13 @@
 export interface EpubLocation {
-
+    startCfi: string,
+    endCfi: string
 }
 
 export interface EpubChapter {
     cfi: string,
     href: string,
-    label: string,
-    spinePos: number,
-    subitems: any[]
+    label?: string,
+    spinePos: number
 }
 
 export interface EpubPage {

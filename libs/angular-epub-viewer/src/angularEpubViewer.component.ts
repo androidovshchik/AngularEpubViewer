@@ -168,8 +168,8 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         this.epub.on('renderer:chapterUnloaded', () => {
             this.onChapterUnloaded.next(null);
         });
-        this.epub.on('renderer:chapterDisplayed', chapter => {
-            this.onChapterDisplayed.next(null);
+        this.epub.on('renderer:chapterDisplayed', (chapter: EpubChapter) => {
+            this.onChapterDisplayed.next(chapter);
         });
         this.epub.on('renderer:resized', () => {
             this.needComputePagination = true;
@@ -177,8 +177,13 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 this.computePagination();
             }
         });
-        this.epub.on('renderer:visibleRangeChanged', () => {
+        this.epub.on('renderer:visibleRangeChanged', range => {
             // renderer:locationChanged is a part of this event
+            this.location = {
+                startCfi: range.start,
+                endCfi: range.end
+            };
+            this.onLocationFound.next(this.location);
         });
         this.epub.renderTo('angularEpubViewerComponent');
     };
