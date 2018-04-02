@@ -1,0 +1,54 @@
+<header>
+    <a id="title-link" href="https://github.com/androidovshchik/AngularEpubViewer" target="_blank">AngularEpubViewer</a>
+    <span id="subtitle">A simple epub viewer component for angular4+ websites.</span>
+</header>
+<main>
+    <angular-epub-viewer [padding]="'16px'" (onChapterDisplayed)="onChapterDisplayed($event)"
+                         (onBookReady)="onBookReady()" [enablePagination]="true" (onChapterUnloaded)="onChapterUnloaded()"
+                         (onError)="onError($event)" (onPagination)="onPagination($event)">
+    </angular-epub-viewer>
+</main>
+<aside>
+    <a id="title-link" href="https://androidovshchik.github.io/AngularEpubViewer/api" target="_blank">API docs here</a>
+    <fieldset>
+        <p>Select compressed epub book</p>
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="book" (change)="onSelectedBook()">
+            <option *ngFor="let book of zippedBooks" [ngValue]="book">
+                {{ book.name }}
+            </option>
+        </select>
+        <p style="margin-top: 4px;">Or pick compressed epub book</p>
+        <input [disabled]="lockAllGui" style="margin-bottom: 4px;" #picker type="file"
+               accept="application/epub+zip" (change)="openFile($event)">
+        <p>Or select unzipped epub book</p>
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="book" (change)="onSelectedBook()">
+            <option *ngFor="let book of unzippedBooks" [ngValue]="book">
+                {{ book.name }}
+            </option>
+        </select>
+    </fieldset>
+    <fieldset>
+        <p>Pagination</p>
+        <input [disabled]="lockAllGui" style="padding: 4px 0;" class="element" type="range" min="1" max="100" value="0">
+        <button [disabled]="lockAllGui" class="button"><i class="fa fa-arrow-left fa-lg"></i></button>
+        <button [disabled]="lockAllGui" class="button"><i class="fa fa-arrow-right fa-lg"></i></button>
+    </fieldset>
+    <fieldset>
+        <p>Table of contents</p>
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chapter">
+            <option *ngFor="let chapter of chapters" [ngValue]="chapter">
+                {{ chapter.label }}
+            </option>
+        </select>
+    </fieldset>
+    <fieldset style="margin-bottom: 16px;">
+        <p>Metadata</p>
+
+    </fieldset>
+</aside>
+<footer>
+    Created by <a id="profile-link" href="https://github.com/androidovshchik" target="_blank">Vlad Kalyuzhnyu</a>
+</footer>
+<a id="icon-link" href="https://github.com/androidovshchik/AngularEpubViewer" target="_blank">
+    <img src="../assets/GitHub-Mark-Light-120px-plus.png" width="30" height="30"/>
+</a>

@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+  background: #333;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}

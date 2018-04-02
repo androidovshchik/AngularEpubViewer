@@ -1,0 +1,66 @@
+{
+  "name": "angular-epub-viewer",
+  "version": "0.0.1",
+  "license": "GPLv3",
+  "author": {
+    "name": "Vlad Kalyuzhnyu",
+    "email": "vladkalyuzhnyu@gmail.com"
+  },
+  "scripts": {
+    "start": "ng serve",
+    "build": "ng build --prod",
+    "docs": "typedoc public_api.ts",
+    "deploy": "ng build --prod --output-path docs --base-href \"https://androidovshchik.github.io/AngularEpubViewer/\"",
+    "postdeploy": "npm run docs",
+    "package": "ng-packagr -p ng-package.json",
+    "tag_release": "git push --follow-tags",
+    "release": "npm publish dist"
+  },
+  "bugs": {
+    "url": "https://github.com/androidovshchik/AngularEpubViewer/issues"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/androidovshchik/AngularEpubViewer.git"
+  },
+  "keywords": [
+    "angular",
+    "angular2",
+    "angular4",
+    "angular5",
+    "epub",
+    "angular-epub",
+    "epub-viewer",
+    "document-viewer",
+    "ionic3"
+  ],
+  "homepage": "https://github.com/androidovshchik/AngularEpubViewer#readme",
+  "peerDependencies": {
+    "@angular/core": ">=4.0.0",
+    "epubjs": "^0.2.21"
+  },
+  "devDependencies": {
+    "@angular/animations": "^5.2.0",
+    "@angular/cli": "1.6.8",
+    "@angular/common": "^5.2.0",
+    "@angular/compiler": "^5.2.0",
+    "@angular/compiler-cli": "^5.2.0",
+    "@angular/core": "^5.2.0",
+    "@angular/forms": "^5.2.0",
+    "@angular/http": "^5.2.0",
+    "@angular/language-service": "^5.2.0",
+    "@angular/platform-browser": "^5.2.0",
+    "@angular/platform-browser-dynamic": "^5.2.0",
+    "@angular/router": "^5.2.0",
+    "@types/node": "6.0.98",
+    "core-js": "^2.4.1",
+    "ng-packagr": "^2.0.0",
+    "np": "^2.20.0",
+    "rxjs": "^5.5.6",
+    "ts-node": "~4.1.0",
+    "typedoc": "^0.10.0",
+    "typescript": "2.6.1",
+    "zone.js": "^0.8.19"
+  }
+}

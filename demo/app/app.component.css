@@ -1,0 +1,100 @@
+header, footer {
+    color: white;
+    padding: 16px;
+    overflow: hidden;
+}
+
+header {
+    height: 70px;
+}
+
+#subtitle {
+    display: block;
+    margin-top: 4px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+main {
+    height: calc(80% - 96px);
+    width: 100%;
+    background: #fafafa;
+}
+
+aside {
+    height: calc(20% - 24px);
+    width: 100%;
+    background: #f5f5f5;
+    border-left: none;
+    border-top: 1px solid black;
+    padding: 0 16px;
+    overflow-y: scroll;
+}
+
+fieldset {
+    margin-top: 16px;
+}
+
+.button {
+    width: 64px;
+    padding: 4px 8px;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.element {
+    display: block;
+    width: 200px;
+    margin-bottom: 16px;
+    padding: 4px 8px;
+}
+
+footer {
+    height: 50px;
+    color: white;
+    white-space: nowrap;
+}
+
+#title-link {
+    font-weight: bold;
+    color: white;
+}
+
+#profile-link {
+    color: white;
+}
+
+#icon-link {
+    position: absolute;
+    display: none;
+    right: 20px;
+    top: 20px;
+}
+
+@media (min-width: 600px) {
+
+    main, aside {
+        float: left;
+    }
+
+    main {
+        height: calc(100% - 120px);
+        width: calc(100% - 360px);
+    }
+
+    aside {
+        height: calc(100% - 120px);
+        width: 360px;
+        border-left: 1px solid black;
+        border-top: none;
+    }
+
+    footer {
+        clear: both;
+    }
+
+    #icon-link {
+        display: block;
+    }
+}

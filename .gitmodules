@@ -1,0 +1,3 @@
+[submodule "demo/assets/books"]
+	path = demo/assets/books
+	url = https://github.com/futurepress/books.git
