@@ -1,3 +1,9 @@
+export interface EpubMetadata {
+
+}
+export interface EpubLocation {
+
+}
 export interface EpubChapter {
     cfi: string,
     href: string,
@@ -8,6 +14,9 @@ export interface EpubChapter {
 export interface EpubPage {
     cfi: string,
     page: number
+}
+export interface EpubSearchResult {
+
 }
 export enum EpubError {
     OPEN_FILE,

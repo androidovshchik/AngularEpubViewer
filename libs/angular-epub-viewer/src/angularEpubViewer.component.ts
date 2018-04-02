@@ -12,21 +12,27 @@ import {
 } from '@angular/core';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Subscription} from "rxjs/Subscription";
-import {Observable} from "rxjs/Observable";
-import {EpubChapter, EpubError, EpubPage} from "./angularEpubViewer.models";
+import {
+    EpubChapter,
+    EpubError,
+    EpubLocation,
+    EpubMetadata,
+    EpubPage,
+    EpubSearchResult
+} from "./angularEpubViewer.models";
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/filter';
 
 declare const ePub: any;
 
 /**
- * Angular Epub Viewer component
+ * AngularEpubViewer component
  */
 @Component({
     selector: 'angular-epub-viewer',
-    template: `<div id="angularEpubViewer" [style.padding]="padding" #angularEpubViewer></div>`,
+    template: `<div id="angularEpubViewerComponent" #angularEpubViewerComponent></div>`,
     styles: [`
-        #angularEpubViewer {
+        #angularEpubViewerComponent {
             width: 100%;
             height: 100%;
             margin: 0;
@@ -38,35 +44,82 @@ declare const ePub: any;
 export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
 
     /**
-     * Root DOM element
+     * Root container's DOM reference
      */
-    @ViewChild('angularEpubViewer', {read: ElementRef})
+    @ViewChild('angularEpubViewerComponent', {read: ElementRef})
     root: ElementRef;
+
     /**
-     * Primary instance
+     * Primary object
      */
     epub: any = null;
 
     /**
-     * Viewport padding in px, em, etc.
+     * Root container's padding in px, em, etc.
      */
     @Input()
-    padding: string = '16px';
+    padding: string = null;
     /**
-     * Pagination requires extra calculates
+     * Enables auto calculate of pagination after loading document or changing of viewport
      */
     @Input()
-    enablePagination: boolean = false;
+    autoPagination: boolean = false;
     /**
-     * TOC requires extra calculates
+     * Enables auto loading of metadata after loading document
      */
     @Input()
-    enableTableOfContents: boolean = false;
+    autoMetadata: boolean = false;
     /**
-     * Metadata requires extra calculates
+     * Enables auto loading of table of contents after loading document
      */
     @Input()
-    enableMetadata: boolean = false;
+    autoTOC: boolean = false;
+
+    /**
+     * Get event when document is loaded
+     */
+    @Output('onDocumentReady')
+    onDocumentReady: EventEmitter<void> = new EventEmitter<void>();
+    /**
+     * Get event when chapter is unloaded
+     */
+    @Output('onChapterUnloaded')
+    onChapterUnloaded: EventEmitter<void> = new EventEmitter<void>();
+    /**
+     * Get event when chapter is displayed
+     */
+    @Output('onChapterDisplayed')
+    onChapterDisplayed: EventEmitter<EpubChapter> = new EventEmitter<EpubChapter>();
+    /**
+     * Get event about search results
+     */
+    @Output('onSearchFinished')
+    onSearchFinished: EventEmitter<EpubSearchResult[]> = new EventEmitter<EpubSearchResult[]>();
+    /**
+     * Get event about pagination
+     */
+    @Output('onPaginationComputed')
+    onPaginationComputed: EventEmitter<EpubPage[]> = new EventEmitter<EpubPage[]>();
+    /**
+     * Get event about the current location
+     */
+    @Output('onLocationFound')
+    onLocationFound: EventEmitter<EpubLocation> = new EventEmitter<EpubLocation>();
+    /**
+     * Get event about metadata
+     */
+    @Output('onMetadataLoaded')
+    onMetadataLoaded: EventEmitter<EpubMetadata> = new EventEmitter<EpubMetadata>();
+    /**
+     * Get event about table of contents
+     */
+    @Output('onTOCLoaded')
+    onTOCLoaded: EventEmitter<EpubChapter[]> = new EventEmitter<EpubChapter[]>();
+    /**
+     * Get event when any error occurred
+     */
+    @Output('onErrorOccurred')
+    onErrorOccurred: EventEmitter<EpubError> = new EventEmitter<EpubError>();
 
     /**
      * BehaviorSubject for loading only after DOM is loaded
@@ -75,25 +128,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     private linkSubscription: Subscription;
     private paginationSubscription: Subscription;
 
-    @Output('onBookReady')
-    onBookReady: EventEmitter<void> = new EventEmitter<void>();
-    @Output('onPagination')
-    onPagination: EventEmitter<EpubPage[]> = new EventEmitter<EpubPage[]>();
-    @Output('onTableOfContents')
-    onTableOfContents: EventEmitter<any> = new EventEmitter<any>();
-    @Output('onMetadata')
-    onMetadata: EventEmitter<any> = new EventEmitter<any>();
-    @Output('onChapterDisplayed')
-    onChapterDisplayed: EventEmitter<EpubChapter> = new EventEmitter<EpubChapter>();
-    @Output('onChapterUnloaded')
-    onChapterUnloaded: EventEmitter<void> = new EventEmitter<void>();
-    @Output('onError')
-    onError: EventEmitter<EpubError> = new EventEmitter<EpubError>();
-
     constructor(private zone: NgZone) {}
 
     ngAfterViewInit() {
-        this.paginationSubscription = this.onBookReady.asObservable()
+        /*this.paginationSubscription = this.onBookReady.asObservable()
             .subscribe(() => {
                 if (this.enablePagination) {
                     this.zone.runOutsideAngular(() => {
@@ -117,14 +155,14 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 this.initEpub({
                     bookPath: link
                 });
-            });
+            });*/
     }
 
     private initEpub = (properties: object) => {
         this.destroyEpub();
         this.epub = ePub(properties);
-        this.epub.renderTo('angularEpubViewer');
-        this.epub.on('book:ready', () => {
+        this.epub.renderTo('angularEpubViewerComponent');
+        /*this.epub.on('book:ready', () => {
             this.onBookReady.next(null);
         });
         this.epub.on('renderer:chapterUnloaded', () => {
@@ -139,20 +177,20 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         });
         this.epub.on('renderer:resized', () => {
 
-        });
+        });*/
     };
 
     /**
-     * Open Epub document by link
-     * @param link Link to file
+     * Opens EPUB document by link
+     * @param link
      */
     openLink(link: string) {
         this._link.next(link);
     }
 
     /**
-     * Open picked Epub file
-     * @param file Picked file
+     * Opens EPUB document file
+     * @param file
      */
     openFile(file: File) {
         if (window['FileReader']) {
@@ -167,30 +205,89 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 };
                 reader.onerror = () => {
                     this.zone.run(() => {
-                        this.onError.emit(EpubError.OPEN_FILE);
+                        this.onErrorOccurred.emit(EpubError.OPEN_FILE);
                     });
                 };
                 reader.readAsArrayBuffer(file);
             });
         } else {
-            this.onError.emit(EpubError.OPEN_FILE);
+            this.onErrorOccurred.emit(EpubError.OPEN_FILE);
         }
     }
 
-    setFontSize(size: string) {
-        this.epub.setStyle('font-size', size);
+    /**
+     * Navigates to the specified url or EPUB CFI or page
+     * @param position
+     */
+    goTo(position: string | number) {
+
     }
 
-    resetFontSize() {
-        this.epub.removeStyle('font-size');
+    /**
+     * Navigates to the next page
+     */
+    nextPage() {
+
     }
 
-    getTableOfContents(): Observable<EpubChapter[]> {
-        return Observable.fromPromise(this.epub.getToc());
+    /**
+     * Navigates to the previous page
+     */
+    previousPage() {
+
     }
 
-    getMetadata(): Observable<any> {
-        return Observable.fromPromise(this.epub.getMetadata());
+    /**
+     * Searches all text matches *in the current chapter*
+     * @param text
+     */
+    searchText(text: string) {
+
+    }
+
+    /**
+     * Adds style to be attached to the document's body element
+     * @param style
+     * @param value
+     */
+    setStyle(style: string, value: string) {
+        this.epub.setStyle(style, value);
+    }
+
+    /**
+     * Removes a style from the rendered document
+     * @param style
+     */
+    resetStyle(style: string) {
+        this.epub.removeStyle(style);
+    }
+
+    /**
+     * Calculates pagination as output event
+     */
+    computePagination() {
+
+    }
+
+    /**
+     * Finds the current location as output event
+     */
+    findLocation() {
+
+    }
+
+    /**
+     * Loads metadata as output event
+     */
+    loadMetadata() {
+        //Observable.fromPromise(this.epub.getMetadata());
+    }
+
+    /**
+     * Loads table of contents as output event
+     */
+    loadTOC() {
+        //Observable.fromPromise(this.epub.getToc());
     }
 
     private destroyEpub() {

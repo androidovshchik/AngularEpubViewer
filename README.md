@@ -124,15 +124,14 @@ Fields:
 | Signature | Short Description |
 | :------------- |:-------------|
 | `epub: ePub` | Primary object |
-| `root: ElementRef` | Root container's reference |
+| `root: ElementRef` | Root container's DOM reference |
 
 Input parameters:
 
 | Signature | Default value | Short Description |
 | :------------- |:-------------|:-------------|
-| `padding: string` | `'16px'` | Root container's padding |
+| `padding: string` | `'16px'` | Root container's padding in px, em, etc |
 | `autoPagination: boolean` | `false` | Enables auto calculate of pagination after loading document or changing of viewport |
-| `autoLocation: boolean` | `false` | Enables auto loading of current location after changing of navigation |
 | `autoMetadata: boolean` | `false` | Enables auto loading of metadata after loading document |
 | `autoTOC: boolean` | `false` | Enables auto loading of table of contents after loading document |
 
@@ -144,10 +143,10 @@ Output events:
 | `onChapterUnloaded: EventEmitter<void>` | Get event when chapter is unloaded  |
 | `onChapterDisplayed: EventEmitter<EpubChapter>` | Get event when chapter is displayed  |
 | `onSearchFinished: EventEmitter<EpubSearchResult[]>` | Get event about search results  |
-| `onPaginationComputed: EventEmitter<EpubPages[]>` | Get event about pagination |
+| `onPaginationComputed: EventEmitter<EpubPage[]>` | Get event about pagination |
 | `onLocationFound: EventEmitter<EpubLocation>` | Get event about the current location |
 | `onMetadataLoaded: EventEmitter<EpubMetadata>` | Get event about metadata |
-| `onTOCLoaded: EventEmitter<EpubChapters[]>` | Get event about table of contents |
+| `onTOCLoaded: EventEmitter<EpubChapter[]>` | Get event about table of contents |
 | `onErrorOccurred: EventEmitter<EpubError>` | Get event when any error occurred |
 
 Methods:
@@ -156,7 +155,7 @@ Methods:
 | :------------- |:-------------|
 | `openLink(link: string): void` | Opens EPUB document by link |
 | `openFile(file: File): void` | Opens EPUB document file |
-| `goTo(position: string | number): void` | Navigates to the specified url or EPUB CFI or page |
+| `goTo(position: string or number): void` | Navigates to the specified url or EPUB CFI or page |
 | `nextPage(): void` | Navigates to the next page |
 | `previousPage(): void` | Navigates to the previous page |
 | `searchText(text: string): void` | Searches all text matches *in the current chapter* |
