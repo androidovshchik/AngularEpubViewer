@@ -24,10 +24,10 @@ export class AppComponent implements OnInit {
 
     unzippedBooks: Book[] = [].concat(UNZIPPED_BOOKS);
     zippedBooks: Book[] = [].concat(ZIPPED_BOOKS);
-    currentBook: Book = UNZIPPED_BOOKS[0];
+    chosenBook: Book = UNZIPPED_BOOKS[0];
 
-    chapters: EpubChapter[];
-    currentChapter: EpubChapter;
+    chapters: EpubChapter[] = [];
+    chosenChapter: EpubChapter = null;
 
     lockAllGui: boolean = true;
 
@@ -41,13 +41,13 @@ export class AppComponent implements OnInit {
         // removing picked file
         this.picker.nativeElement.value = null;
         // path will be translated to link
-        this.epubViewer.openLink(this.currentBook.path);
+        this.epubViewer.openLink(this.chosenBook.path);
     }
 
     openFile(event) {
         this.lockAllGui = true;
         // removing selected book
-        this.currentBook = null;
+        this.chosenBook = null;
         this.epubViewer.openFile(event.target.files[0]);
     }
 
@@ -105,6 +105,12 @@ export class AppComponent implements OnInit {
                 break;
             case EpubError.PAGINATION:
                 alert('Error while calculating pagination');
+                break;
+            case EpubError.METADATA:
+                alert('Error while loading metadata');
+                break;
+            case EpubError.TOC:
+                alert('Error while loading table of contents');
                 break;
         }
     }

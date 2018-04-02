@@ -14,7 +14,7 @@
 <aside>
     <fieldset>
         <p>Select compressed epub book</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="currentBook" (change)="onSelectedBook()">
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chosenBook" (change)="onSelectedBook()">
             <option *ngFor="let book of zippedBooks" [ngValue]="book">
                 {{ book.name }}
             </option>
@@ -23,7 +23,7 @@
         <input [disabled]="lockAllGui" style="margin-bottom: 4px;" #picker type="file"
                accept="application/epub+zip" (change)="openFile($event)">
         <p>Or select unzipped epub book</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="currentBook" (change)="onSelectedBook()">
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chosenBook" (change)="onSelectedBook()">
             <option *ngFor="let book of unzippedBooks" [ngValue]="book">
                 {{ book.name }}
             </option>
@@ -37,7 +37,7 @@
     </fieldset>
     <fieldset>
         <p>Table of contents</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="currentChapter">
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chosenChapter">
             <option *ngFor="let chapter of chapters" [ngValue]="chapter">
                 {{ chapter.label }}
             </option>

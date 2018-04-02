@@ -20,7 +20,6 @@ import {
     EpubPage,
     EpubSearchResult
 } from "./angularEpubViewer.models";
-import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/filter';
 
 declare const ePub: any;
