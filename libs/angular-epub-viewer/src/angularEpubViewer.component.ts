@@ -227,14 +227,14 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Navigates to the next page
      */
     nextPage() {
-
+        this.epub.nextPage();
     }
 
     /**
      * Navigates to the previous page
      */
     previousPage() {
-
+        this.epub.prevPage();
     }
 
     /**
@@ -242,7 +242,12 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * @param text
      */
     searchText(text: string) {
-
+        this.zone.runOutsideAngular(() => {
+            const results: EpubSearchResult[] = this.epub.currentChapter.find(text);
+            this.zone.run(() => {
+                this.onSearchFinished.next(results);
+            });
+        });
     }
 
     /**

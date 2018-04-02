@@ -5,8 +5,8 @@
 <main>
     <angular-epub-viewer [padding]="'16px'" [autoPagination]="true" [autoMetadata]="true" [autoTOC]="true"
                          (onDocumentReady)="onDocumentReady()" (onChapterUnloaded)="onChapterUnloaded()"
-                         (onChapterDisplayed)="onChapterDisplayed($event)" (onSearchFinished)="onChapterUnloaded($event)"
-                         (onPaginationComputed)="onPaginationComputed($event)" (onLocationFound)="onChapterUnloaded($event)"
+                         (onChapterDisplayed)="onChapterDisplayed($event)" (onSearchFinished)="onSearchFinished($event)"
+                         (onPaginationComputed)="onPaginationComputed($event)" (onLocationFound)="onLocationFound($event)"
                          (onMetadataLoaded)="onMetadataLoaded($event)" (onTOCLoaded)="onTOCLoaded($event)"
                          (onErrorOccurred)="onErrorOccurred($event)" #epubViewer>
     </angular-epub-viewer>

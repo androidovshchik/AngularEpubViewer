@@ -34,7 +34,6 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         // not in constructor because epubViewer wasn't initialized then
         this.onSelectedBook();
-        this.epubViewer.setStyle('font-size', '30px');
     }
 
     onSelectedBook() {
@@ -54,6 +53,7 @@ export class AppComponent implements OnInit {
 
     onDocumentReady() {
         console.log('event:onDocumentReady');
+        this.epubViewer.setStyle('font-size', '16px');
         /*const tocSubscription = this.epubViewer.getTableOfContents()
             .subscribe((chapters: EpubChapter[]) => {
                 //console.log(chapters);
@@ -73,6 +73,7 @@ export class AppComponent implements OnInit {
 
     onChapterDisplayed(chapter: EpubChapter) {
         console.log('event:onChapterDisplayed');
+        this.epubViewer.searchText('a');
     }
 
     onLocationFound(location: EpubLocation) {

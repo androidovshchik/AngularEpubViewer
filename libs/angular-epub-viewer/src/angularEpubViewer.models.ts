@@ -16,7 +16,8 @@ export interface EpubPage {
 }
 
 export interface EpubSearchResult {
-
+    cfi: string,
+    excerpt: string
 }
 
 export interface EpubMetadata {
