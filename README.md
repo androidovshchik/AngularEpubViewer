@@ -125,6 +125,7 @@ Fields:
 | :------------- |:-------------|
 | `epub: ePub` | Primary object |
 | `root: ElementRef` | Root container's DOM reference |
+| `location: EpubLocation` | Current location of document's rendered part |
 
 Input parameters:
 
@@ -155,14 +156,13 @@ Methods:
 | :------------- |:-------------|
 | `openLink(link: string): void` | Opens EPUB document by link |
 | `openFile(file: File): void` | Opens EPUB document file |
-| `goTo(position: string or number): void` | Navigates to the specified url or EPUB CFI or page |
+| `goTo(location: string or number): void` | Navigates to the specified url or EPUB CFI or page |
 | `nextPage(): void` | Navigates to the next page |
 | `previousPage(): void` | Navigates to the previous page |
 | `searchText(text: string): void` | Searches all text matches *in the current chapter* |
 | `setStyle(style: string, value: string): void` | Adds style to be attached to the document's body element |
 | `resetStyle(style: string): void` | Removes a style from the rendered document |
 | `computePagination(): void` | Calculates pagination as output event |
-| `findLocation(): void` | Finds the current location as output event |
 | `loadMetadata(): void` | Loads metadata as output event |
 | `loadTOC(): void` | Loads table of contents as output event |
 

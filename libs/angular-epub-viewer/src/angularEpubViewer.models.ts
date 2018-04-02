@@ -1,6 +1,3 @@
-export interface EpubMetadata {
-
-}
 export interface EpubLocation {
 
 }
@@ -16,6 +13,9 @@ export interface EpubPage {
     page: number
 }
 export interface EpubSearchResult {
+
+}
+export interface EpubMetadata {
 
 }
 export enum EpubError {

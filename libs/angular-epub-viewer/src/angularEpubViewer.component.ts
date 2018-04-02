@@ -30,7 +30,7 @@ declare const ePub: any;
  */
 @Component({
     selector: 'angular-epub-viewer',
-    template: `<div id="angularEpubViewerComponent" #angularEpubViewerComponent></div>`,
+    template: `<div id="angularEpubViewerComponent" [style.padding]="padding" #angularEpubViewerComponent></div>`,
     styles: [`
         #angularEpubViewerComponent {
             width: 100%;
@@ -53,6 +53,11 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Primary object
      */
     epub: any = null;
+
+    /**
+     * Current location of document's rendered part
+     */
+    location: EpubLocation = null;
 
     /**
      * Root container's padding in px, em, etc.
@@ -122,10 +127,11 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     onErrorOccurred: EventEmitter<EpubError> = new EventEmitter<EpubError>();
 
     /**
-     * BehaviorSubject for loading only after DOM is loaded
+     * Starts loading document by link after DOM is ready
      */
     private _link: BehaviorSubject<string> = new BehaviorSubject<string>(null);
     private linkSubscription: Subscription;
+
     private paginationSubscription: Subscription;
 
     constructor(private zone: NgZone) {}
@@ -217,9 +223,9 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
 
     /**
      * Navigates to the specified url or EPUB CFI or page
-     * @param position
+     * @param location
      */
-    goTo(position: string | number) {
+    goTo(location: string | number) {
 
     }
 
@@ -266,13 +272,6 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Calculates pagination as output event
      */
     computePagination() {
-
-    }
-
-    /**
-     * Finds the current location as output event
-     */
-    findLocation() {
 
     }
 
