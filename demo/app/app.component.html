@@ -5,16 +5,16 @@
 <main>
     <angular-epub-viewer [padding]="'16px'" [autoPagination]="true" [autoMetadata]="true" [autoTOC]="true"
                          (onDocumentReady)="onDocumentReady()" (onChapterUnloaded)="onChapterUnloaded()"
-                         (onChapterDisplayed)="onChapterDisplayed($event)" (onSearchFinished)="onChapterUnloaded()"
-                         (onPaginationComputed)="onPagination($event)" (onLocationFound)="onChapterUnloaded()"
-                         (onMetadataLoaded)="onChapterUnloaded()" (onTOCLoaded)="onChapterUnloaded()"
-                         (onErrorOccurred)="onError($event)" #epubViewer>
+                         (onChapterDisplayed)="onChapterDisplayed($event)" (onSearchFinished)="onChapterUnloaded($event)"
+                         (onPaginationComputed)="onPaginationComputed($event)" (onLocationFound)="onChapterUnloaded($event)"
+                         (onMetadataLoaded)="onMetadataLoaded($event)" (onTOCLoaded)="onTOCLoaded($event)"
+                         (onErrorOccurred)="onErrorOccurred($event)" #epubViewer>
     </angular-epub-viewer>
 </main>
 <aside>
     <fieldset>
         <p>Select compressed epub book</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="book" (change)="onSelectedBook()">
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="currentBook" (change)="onSelectedBook()">
             <option *ngFor="let book of zippedBooks" [ngValue]="book">
                 {{ book.name }}
             </option>
@@ -23,7 +23,7 @@
         <input [disabled]="lockAllGui" style="margin-bottom: 4px;" #picker type="file"
                accept="application/epub+zip" (change)="openFile($event)">
         <p>Or select unzipped epub book</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="book" (change)="onSelectedBook()">
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="currentBook" (change)="onSelectedBook()">
             <option *ngFor="let book of unzippedBooks" [ngValue]="book">
                 {{ book.name }}
             </option>
@@ -37,7 +37,7 @@
     </fieldset>
     <fieldset>
         <p>Table of contents</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chapter">
+        <select [disabled]="lockAllGui" class="element" [(ngModel)]="currentChapter">
             <option *ngFor="let chapter of chapters" [ngValue]="chapter">
                 {{ chapter.label }}
             </option>
@@ -52,5 +52,5 @@
     Created by <a id="profile-link" href="https://github.com/androidovshchik" target="_blank">Vlad Kalyuzhnyu</a>
 </footer>
 <a id="icon-link" href="https://github.com/androidovshchik/AngularEpubViewer" target="_blank">
-    <img src="../assets/GitHub-Mark-Light-120px-plus.png" width="30" height="30"/>
+    <img src="{{ getGithubIcon() }}" width="30" height="30"/>
 </a>

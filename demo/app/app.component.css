@@ -8,14 +8,6 @@ header {
     height: 70px;
 }
 
-#subtitle {
-    display: block;
-    margin-top: 4px;
-    overflow:hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 main {
     height: calc(80% - 96px);
     width: 100%;
@@ -36,6 +28,12 @@ fieldset {
     margin-top: 16px;
 }
 
+footer {
+    height: 50px;
+    color: white;
+    white-space: nowrap;
+}
+
 .button {
     width: 64px;
     padding: 4px 8px;
@@ -50,9 +48,11 @@ fieldset {
     padding: 4px 8px;
 }
 
-footer {
-    height: 50px;
-    color: white;
+#subtitle {
+    display: block;
+    margin-top: 4px;
+    overflow:hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 

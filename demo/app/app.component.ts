@@ -1,6 +1,14 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AngularEpubViewerComponent} from "../../libs/angular-epub-viewer/src/angularEpubViewer.component";
-import {EpubChapter, EpubError, EpubPage} from "../../libs/angular-epub-viewer/src/angularEpubViewer.models";
+import {
+    EpubChapter,
+    EpubError,
+    EpubLocation,
+    EpubMetadata,
+    EpubPage,
+    EpubSearchResult
+} from "../../libs/angular-epub-viewer/src/angularEpubViewer.models";
+import {environment} from "../environments/environment";
 
 @Component({
     selector: 'app-root',
@@ -16,10 +24,10 @@ export class AppComponent implements OnInit {
 
     unzippedBooks: Book[] = [].concat(UNZIPPED_BOOKS);
     zippedBooks: Book[] = [].concat(ZIPPED_BOOKS);
-    book: Book = UNZIPPED_BOOKS[0];
+    currentBook: Book = UNZIPPED_BOOKS[0];
 
-    chapter: EpubChapter;
     chapters: EpubChapter[];
+    currentChapter: EpubChapter;
 
     lockAllGui: boolean = true;
 
@@ -33,13 +41,13 @@ export class AppComponent implements OnInit {
         // removing picked file
         this.picker.nativeElement.value = null;
         // path will be translated to link
-        this.epubViewer.openLink(this.book.path);
+        this.epubViewer.openLink(this.currentBook.path);
     }
 
     openFile(event) {
         this.lockAllGui = true;
         // removing selected book
-        this.book = null;
+        this.currentBook = null;
         this.epubViewer.openFile(event.target.files[0]);
     }
 
@@ -58,23 +66,38 @@ export class AppComponent implements OnInit {
             });*/
     }
 
-    onPagination(pages: EpubPage[]) {
-        console.log('event:onPagination');
+    onChapterUnloaded() {
+        console.log('event:onChapterUnloaded');
+    }
+
+    onChapterDisplayed(chapter: EpubChapter) {
+        console.log('event:onChapterDisplayed');
+    }
+
+    onLocationFound(location: EpubLocation) {
+        console.log('event:onLocationFound');
+    }
+
+    onSearchFinished(results: EpubSearchResult[]) {
+        console.log('event:onSearchFinished');
+    }
+
+    onPaginationComputed(pages: EpubPage[]) {
+        console.log('event:onPaginationComputed');
         // locking gui because we need in pagination in this demo and it requires extra calculation with time
         this.lockAllGui = false;
     }
 
-    onChapterDisplayed(chapter) {
-        console.log('event:onChapterDisplayed');
-        //console.log(chapter);
+    onMetadataLoaded(metadata: EpubMetadata) {
+        console.log('event:onMetadataLoaded');
     }
 
-    onChapterUnloaded() {
-        //console.log('event:onChapterUnloaded');
+    onTOCLoaded(chapters: EpubChapter[]) {
+        console.log('event:onTOCLoaded');
     }
 
-    onError(error: EpubError) {
-        console.log('event:onError');
+    onErrorOccurred(error: EpubError) {
+        console.log('event:onErrorOccurred');
         this.lockAllGui = false;
         switch (error) {
             case EpubError.OPEN_FILE:
@@ -84,6 +107,10 @@ export class AppComponent implements OnInit {
                 alert('Error while calculating pagination');
                 break;
         }
+    }
+
+    getGithubIcon(): string {
+        return `${environment.production ? '' : '../'}assets/GitHub-Mark-Light-120px-plus.png`
     }
 }
 
