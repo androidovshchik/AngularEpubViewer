@@ -32,8 +32,12 @@
     <fieldset>
         <p>Pagination</p>
         <input [disabled]="lockAllGui" style="padding: 4px 0;" class="element" type="range" min="1" max="100" value="0">
-        <button [disabled]="lockAllGui" class="button"><i class="fa fa-arrow-left fa-lg"></i></button>
-        <button [disabled]="lockAllGui" class="button"><i class="fa fa-arrow-right fa-lg"></i></button>
+        <button [disabled]="lockAllGui" class="button" (click)="epubViewer.previousPage()">
+            <i class="fa fa-arrow-left fa-lg"></i>
+        </button>
+        <button [disabled]="lockAllGui" class="button" (click)="epubViewer.nextPage()">
+            <i class="fa fa-arrow-right fa-lg"></i>
+        </button>
     </fieldset>
     <fieldset>
         <p>Table of contents</p>

@@ -52,13 +52,13 @@ Optional scripts:
 >
 > includes [default plugins](https://github.com/futurepress/epub.js/tree/master/hooks/default)
 
+> `"../node_modules/epubjs/build/libs/zip.min.js"` *recommended*
+>
+> includes [JSZip.js library](https://github.com/Stuk/jszip)
+
 > `"../node_modules/epubjs/build/libs/localforage.min.js"`
 >
 > includes [localForage.js library](https://github.com/localForage/localForage)
-
-> `"../node_modules/epubjs/build/libs/zip.min.js"`
->
-> includes [JSZip.js library](https://github.com/Stuk/jszip)
 
 Other plugins may be found [here](https://github.com/futurepress/epub.js/tree/master/hooks/extensions)
 

@@ -58,6 +58,8 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      */
     location: EpubLocation = null;
 
+    documentReady: boolean = false;
+
     computingPagination: boolean = false;
 
     /**
@@ -151,6 +153,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         this.destroyEpub();
         this.epub = ePub(properties);
         this.epub.on('book:ready', () => {
+            this.documentReady = true;
             this.onDocumentReady.next(null);
             if (this.autoPagination) {
                 this.computePagination();
@@ -170,7 +173,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         });
         this.epub.on('renderer:resized', () => {
             this.needComputePagination = true;
-            if (this.autoPagination) {
+            if (this.documentReady && this.autoPagination) {
                 this.computePagination();
             }
         });
@@ -205,7 +208,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 };
                 reader.onerror = () => {
                     this.zone.run(() => {
-                        this.onErrorOccurred.emit(EpubError.OPEN_FILE);
+                        this.onErrorOccurred.emit(EpubError.READ_FILE);
                     });
                 };
                 reader.readAsArrayBuffer(file);
@@ -220,13 +223,30 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * @param location
      */
     goTo(location: string | number) {
-
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
+        if (typeof location === "number") {
+            // page
+            this.epub.displayChapter(location);
+        } else if (/.*html$/.test(location)) {
+            // url
+            this.epub.goto(location);
+        } else {
+            // EPUB CFI
+            this.epub.displayChapter(location);
+        }
     }
 
     /**
      * Navigates to the next page
      */
     nextPage() {
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
         this.epub.nextPage();
     }
 
@@ -234,6 +254,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Navigates to the previous page
      */
     previousPage() {
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
         this.epub.prevPage();
     }
 
@@ -242,6 +266,9 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * @param text
      */
     searchText(text: string) {
+        if (!this.documentReady) {
+            return;
+        }
         this.zone.runOutsideAngular(() => {
             const results: EpubSearchResult[] = this.epub.currentChapter.find(text);
             this.zone.run(() => {
@@ -256,6 +283,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * @param value
      */
     setStyle(style: string, value: string) {
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
         this.epub.setStyle(style, value);
     }
 
@@ -264,6 +295,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * @param style
      */
     resetStyle(style: string) {
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
         this.epub.removeStyle(style);
     }
 
@@ -271,6 +306,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Calculates pagination as output event
      */
     computePagination() {
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
         if (this.computingPagination) {
             return;
         }
@@ -291,11 +330,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 .catch(() => {
                     this.zone.run(() => {
                         this.computingPagination = false;
-                        if (this.needComputePagination) {
-                            this.computePagination();
-                        } else {
-                            this.onErrorOccurred.emit(EpubError.PAGINATION);
-                        }
+                        this.onErrorOccurred.emit(EpubError.COMPUTE_PAGINATION);
                     });
                 });
         });
@@ -305,6 +340,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Loads metadata as output event
      */
     loadMetadata() {
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
         this.zone.runOutsideAngular(() => {
             this.epub.getMetadata()
                 .then((metadata: EpubMetadata) => {
@@ -314,7 +353,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 })
                 .catch(() => {
                     this.zone.run(() => {
-                        this.onErrorOccurred.emit(EpubError.METADATA);
+                        this.onErrorOccurred.emit(EpubError.LOAD_METADATA);
                     });
                 });
         });
@@ -324,6 +363,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      * Loads table of contents as output event
      */
     loadTOC() {
+        if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
         this.zone.runOutsideAngular(() => {
             this.epub.getToc()
                 .then((chapters: EpubChapter[]) => {
@@ -333,13 +376,14 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 })
                 .catch(() => {
                     this.zone.run(() => {
-                        this.onErrorOccurred.emit(EpubError.TOC);
+                        this.onErrorOccurred.emit(EpubError.LOAD_TOC);
                     });
                 });
         });
     }
 
     private destroyEpub() {
+        this.documentReady = false;
         if (this.epub) {
             this.epub.destroy();
             this.epub = null;

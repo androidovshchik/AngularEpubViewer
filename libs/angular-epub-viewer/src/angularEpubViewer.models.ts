@@ -37,8 +37,10 @@ export interface EpubMetadata {
 }
 
 export enum EpubError {
+    DOCUMENT_READY,
     OPEN_FILE,
-    PAGINATION,
-    METADATA,
-    TOC
+    READ_FILE,
+    COMPUTE_PAGINATION,
+    LOAD_METADATA,
+    LOAD_TOC
 }

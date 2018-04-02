@@ -105,13 +105,13 @@ export class AppComponent implements OnInit {
             case EpubError.OPEN_FILE:
                 alert('Error while opening file');
                 break;
-            case EpubError.PAGINATION:
+            case EpubError.COMPUTE_PAGINATION:
                 alert('Error while calculating pagination');
                 break;
-            case EpubError.METADATA:
+            case EpubError.LOAD_METADATA:
                 alert('Error while loading metadata');
                 break;
-            case EpubError.TOC:
+            case EpubError.LOAD_TOC:
                 alert('Error while loading table of contents');
                 break;
         }
