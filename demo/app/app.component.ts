@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
 
     onBookReady() {
         console.log('event:onBookReady');
-        const tocSubscription = this.epubViewer.getTableOfContents()
+        /*const tocSubscription = this.epubViewer.getTableOfContents()
             .subscribe((chapters: EpubChapter[]) => {
                 //console.log(chapters);
                 this.chapters = [].concat(chapters);
@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
                 if (tocSubscription) {
                     tocSubscription.unsubscribe();
                 }
-            });
+            });*/
     }
 
     onPagination(pages: EpubPage[]) {

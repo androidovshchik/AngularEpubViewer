@@ -48,16 +48,16 @@ Then add **required** `epub.js` script to your `.angular-cli.json`
 
 Optional scripts:
 
-`"../node_modules/epubjs/build/hooks.js"`
-
+> `"../node_modules/epubjs/build/hooks.js"`
+>
 > includes [default plugins](https://github.com/futurepress/epub.js/tree/master/hooks/default)
 
-`"../node_modules/epubjs/build/libs/localforage.min.js"`
-
+> `"../node_modules/epubjs/build/libs/localforage.min.js"`
+>
 > includes [localForage.js library](https://github.com/localForage/localForage)
 
-`"../node_modules/epubjs/build/libs/zip.min.js"`
-
+> `"../node_modules/epubjs/build/libs/zip.min.js"`
+>
 > includes [JSZip.js library](https://github.com/Stuk/jszip)
 
 Other plugins may be found [here](https://github.com/futurepress/epub.js/tree/master/hooks/extensions)
@@ -124,24 +124,26 @@ Fields:
 | Signature | Short Description |
 | :------------- |:-------------|
 | `epub: ePub` | Primary object |
+| `root: ElementRef` | Root container's reference |
 
 Input parameters:
 
 | Signature | Default value | Short Description |
 | :------------- |:-------------|:-------------|
-| `link: string` | `null` | Document's link for initial loading |
 | `padding: string` | `'16px'` | Root container's padding |
-| `enableAutoPagination: boolean` | `false` | Enables auto calculate of pagination after loading book or changing of viewport |
-| `enableAutoLocation: boolean` | `false` | Enables auto loading of current location after any changing of navigation |
-| `enableAutoMetadata: boolean` | `false` | Enables auto loading of metadata after loading book |
-| `enableAutoTOC: boolean` | `false` | Enables auto loading of table of contents after loading book |
+| `autoPagination: boolean` | `false` | Enables auto calculate of pagination after loading document or changing of viewport |
+| `autoLocation: boolean` | `false` | Enables auto loading of current location after changing of navigation |
+| `autoMetadata: boolean` | `false` | Enables auto loading of metadata after loading document |
+| `autoTOC: boolean` | `false` | Enables auto loading of table of contents after loading document |
 
 Output events:
 
 | Signature | Short Description |
 | :------------- |:-------------|
 | `onDocumentReady: EventEmitter<void>` | Get event when document is loaded |
-| `onSearchFinish: EventEmitter<EpubSearchResult[]>` | Get event about search results  |
+| `onChapterUnloaded: EventEmitter<void>` | Get event when chapter is unloaded  |
+| `onChapterDisplayed: EventEmitter<EpubChapter>` | Get event when chapter is displayed  |
+| `onSearchFinished: EventEmitter<EpubSearchResult[]>` | Get event about search results  |
 | `onPaginationComputed: EventEmitter<EpubPages[]>` | Get event about pagination |
 | `onLocationFound: EventEmitter<EpubLocation>` | Get event about the current location |
 | `onMetadataLoaded: EventEmitter<EpubMetadata>` | Get event about metadata |
@@ -154,16 +156,16 @@ Methods:
 | :------------- |:-------------|
 | `openLink(link: string): void` | Opens EPUB document by link |
 | `openFile(file: File): void` | Opens EPUB document file |
-| `goToUrl(url: string): void` | Navigates to the specified url |
-| `goToCFI(cfi: string): void` | Navigates to the specified EPUB CFI |
-| `goToPage(page: number): void` | Navigates to the specified page |
+| `goTo(position: string | number): void` | Navigates to the specified url or EPUB CFI or page |
 | `nextPage(): void` | Navigates to the next page |
 | `previousPage(): void` | Navigates to the previous page |
-| `searchText(text: string): void` | Finds all text matches *in the current chapter* |
-| `forceComputePagination(): void` | Calculates pagination as output event |
-| `forceFindLocation(): void` | Finds the current location as output event |
-| `forceLoadMetadata(): void` | Loads metadata as output event |
-| `forceLoadTOC(): void` | Loads table of contents as output event |
+| `searchText(text: string): void` | Searches all text matches *in the current chapter* |
+| `setStyle(style: string, value: string): void` | Adds style to be attached to the document's body element |
+| `resetStyle(style: string): void` | Removes a style from the rendered document |
+| `computePagination(): void` | Calculates pagination as output event |
+| `findLocation(): void` | Finds the current location as output event |
+| `loadMetadata(): void` | Loads metadata as output event |
+| `loadTOC(): void` | Loads table of contents as output event |
 
 ### Running demo from sources
 
