@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         // not in constructor because epubViewer wasn't initialized then
         this.onSelectedBook();
+        this.epubViewer.setStyle('font-size', '30px');
     }
 
     onSelectedBook() {
