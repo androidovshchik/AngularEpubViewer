@@ -3,13 +3,15 @@
     <span id="subtitle">A simple epub viewer component for angular4+ websites.</span>
 </header>
 <main>
-    <angular-epub-viewer [padding]="'16px'" (onChapterDisplayed)="onChapterDisplayed($event)"
-                         (onBookReady)="onBookReady()" [enablePagination]="true" (onChapterUnloaded)="onChapterUnloaded()"
-                         (onError)="onError($event)" (onPagination)="onPagination($event)">
+    <angular-epub-viewer [padding]="'16px'" [autoPagination]="true" [autoMetadata]="true" [autoTOC]="true"
+                         (onDocumentReady)="onDocumentReady()" (onChapterUnloaded)="onChapterUnloaded()"
+                         (onChapterDisplayed)="onChapterDisplayed($event)" (onSearchFinished)="onChapterUnloaded()"
+                         (onPaginationComputed)="onPagination($event)" (onLocationFound)="onChapterUnloaded()"
+                         (onMetadataLoaded)="onChapterUnloaded()" (onTOCLoaded)="onChapterUnloaded()"
+                         (onErrorOccurred)="onError($event)" #epubViewer>
     </angular-epub-viewer>
 </main>
 <aside>
-    <a id="title-link" href="https://androidovshchik.github.io/AngularEpubViewer/api" target="_blank">API docs here</a>
     <fieldset>
         <p>Select compressed epub book</p>
         <select [disabled]="lockAllGui" class="element" [(ngModel)]="book" (change)="onSelectedBook()">

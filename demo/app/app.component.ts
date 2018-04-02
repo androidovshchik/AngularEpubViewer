@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
     @ViewChild('picker', {read: ElementRef})
     picker: ElementRef;
-    @ViewChild(AngularEpubViewerComponent)
+    @ViewChild('epubViewer')
     epubViewer: AngularEpubViewerComponent;
 
     unzippedBooks: Book[] = [].concat(UNZIPPED_BOOKS);
@@ -43,8 +43,8 @@ export class AppComponent implements OnInit {
         this.epubViewer.openFile(event.target.files[0]);
     }
 
-    onBookReady() {
-        console.log('event:onBookReady');
+    onDocumentReady() {
+        console.log('event:onDocumentReady');
         /*const tocSubscription = this.epubViewer.getTableOfContents()
             .subscribe((chapters: EpubChapter[]) => {
                 //console.log(chapters);
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
     }
 
     onChapterUnloaded() {
-        console.log('event:onChapterUnloaded');
+        //console.log('event:onChapterUnloaded');
     }
 
     onError(error: EpubError) {

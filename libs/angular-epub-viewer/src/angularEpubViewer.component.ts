@@ -65,7 +65,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     @Input()
     padding: string = null;
     /**
-     * Enables auto calculate of pagination after loading document or changing of viewport
+     * Enables auto calculate of pagination after loading document or changes of viewport size
      */
     @Input()
     autoPagination: boolean = false;

@@ -132,7 +132,7 @@ Input parameters:
 | Signature | Default value | Short Description |
 | :------------- |:-------------|:-------------|
 | `padding: string` | `'16px'` | Root container's padding in px, em, etc |
-| `autoPagination: boolean` | `false` | Enables auto calculate of pagination after loading document or changing of viewport |
+| `autoPagination: boolean` | `false` | Enables auto calculate of pagination after loading document or changes of viewport size |
 | `autoMetadata: boolean` | `false` | Enables auto loading of metadata after loading document |
 | `autoTOC: boolean` | `false` | Enables auto loading of table of contents after loading document |
 

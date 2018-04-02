@@ -40,6 +40,9 @@
     "@angular/core": ">=4.0.0",
     "epubjs": "^0.2.21"
   },
+  "dependencies": {
+    "epubjs": "^0.2.21"
+  },
   "devDependencies": {
     "@angular/animations": "^5.2.0",
     "@angular/cli": "1.6.8",
