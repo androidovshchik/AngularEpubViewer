@@ -21,11 +21,16 @@ aside {
     border-left: none;
     border-top: 1px solid black;
     padding: 0 16px;
+    overflow-x: hidden;
     overflow-y: scroll;
 }
 
 fieldset {
+    width: 100%;
     margin-top: 16px;
+    padding-top: 0;
+    padding-bottom: 0;
+    word-break: break-all;
 }
 
 footer {

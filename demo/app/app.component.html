@@ -48,8 +48,26 @@
         </select>
     </fieldset>
     <fieldset style="margin-bottom: 16px;">
+        <p>Search text in current chapter</p>
+        <input class="element" type="text">
+    </fieldset>
+    <fieldset style="margin-bottom: 16px;">
+        <p>Padding</p>
+        <select class="element" [(ngModel)]="padding">
+            <option *ngFor="let padding of paddings" [ngValue]="padding">
+                {{ padding }}
+            </option>
+        </select>
+        <p>Font size</p>
+        <select class="element" [(ngModel)]="fontSize">
+            <option *ngFor="let fontSize of fontSizes" [ngValue]="fontSize">
+                {{ fontSize }}
+            </option>
+        </select>
+    </fieldset>
+    <fieldset style="margin-bottom: 16px;">
         <p>Metadata</p>
-
+        <div style="margin-bottom: 16px;" #metadata></div>
     </fieldset>
 </aside>
 <footer>

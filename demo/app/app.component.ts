@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {AngularEpubViewerComponent} from "../../libs/angular-epub-viewer/src/angularEpubViewer.component";
 import {
     EpubChapter,
@@ -13,14 +13,17 @@ import {environment} from "../environments/environment";
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
 
-    @ViewChild('picker', {read: ElementRef})
-    picker: ElementRef;
     @ViewChild('epubViewer')
     epubViewer: AngularEpubViewerComponent;
+    @ViewChild('picker', {read: ElementRef})
+    picker: ElementRef;
+    @ViewChild('metadata', {read: ElementRef})
+    metadata: ElementRef;
 
     unzippedBooks: Book[] = [].concat(UNZIPPED_BOOKS);
     zippedBooks: Book[] = [].concat(ZIPPED_BOOKS);
@@ -28,6 +31,12 @@ export class AppComponent implements OnInit {
 
     chapters: EpubChapter[] = [];
     chosenChapter: EpubChapter = null;
+
+    fontSizes: string[] = [].concat(FONT_SIZES);
+    fontSize: string = this.fontSizes[2];
+
+    paddings: string[] = [].concat(PADDINGS);
+    padding: string = this.paddings[2];
 
     lockAllGui: boolean = true;
 
@@ -78,6 +87,7 @@ export class AppComponent implements OnInit {
 
     onLocationFound(location: EpubLocation) {
         console.log('event:onLocationFound');
+        console.log(location);
     }
 
     onSearchFinished(results: EpubSearchResult[]) {
@@ -92,6 +102,9 @@ export class AppComponent implements OnInit {
 
     onMetadataLoaded(metadata: EpubMetadata) {
         console.log('event:onMetadataLoaded');
+        this.metadata.nativeElement.innerHTML = JSON.stringify(metadata, null, 2)
+            .replace(/\n/g, '<br>')
+            .replace(/ /g, '&nbsp;');
     }
 
     onTOCLoaded(chapters: EpubChapter[]) {
@@ -102,8 +115,14 @@ export class AppComponent implements OnInit {
         console.log('event:onErrorOccurred');
         this.lockAllGui = false;
         switch (error) {
+            case EpubError.DOCUMENT_READY:
+                alert('Error while accessing unloaded document');
+                break;
             case EpubError.OPEN_FILE:
                 alert('Error while opening file');
+                break;
+            case EpubError.READ_FILE:
+                alert('Error while reading file');
                 break;
             case EpubError.COMPUTE_PAGINATION:
                 alert('Error while calculating pagination');
@@ -159,3 +178,23 @@ const ZIPPED_BOOKS: Book[] = [{
     name: 'Moby Dick',
     unzipped: false
 }];
+
+const PADDINGS: string[] = [
+    '0',
+    '8px',
+    '16px',
+    '24px',
+    '32px',
+    '40px',
+    '48px'
+];
+
+const FONT_SIZES: string[] = [
+    '8px',
+    '12px',
+    '16px',
+    '20px',
+    '24px',
+    '28px',
+    '32px'
+];

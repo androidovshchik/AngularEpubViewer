@@ -52,7 +52,7 @@ Optional scripts:
 >
 > includes [default plugins](https://github.com/futurepress/epub.js/tree/master/hooks/default)
 
-> `"../node_modules/epubjs/build/libs/zip.min.js"` *recommended*
+> `"../node_modules/epubjs/build/libs/zip.min.js"` *(recommended)*
 >
 > includes [JSZip.js library](https://github.com/Stuk/jszip)
 
@@ -96,6 +96,8 @@ import { AngularEpubViewerModule } from 'angular-epub-viewer';
 ```html
 <angular-epub-viewer #epubViewer></angular-epub-viewer>
 <input type="file" accept="application/epub+zip" (change)="openFile($event)">
+<button (click)="epubViewer.previousPage()">Previous page</button>
+<button (click)="epubViewer.nextPage()">Next page</button>
 ```
 
 `*.component.ts` file
@@ -125,7 +127,7 @@ Fields:
 | :------------- |:-------------|
 | `epub: ePub` | Primary object |
 | `root: ElementRef` | Root container's DOM reference |
-| `location: EpubLocation` | Current location of document's rendered part |
+| `currentLocation: EpubLocation` | Current location of document's rendered part |
 | `documentReady: boolean` | Shows whenever document is ready |
 | `computingPagination: boolean` | Shows whenever pagination is computing |
 

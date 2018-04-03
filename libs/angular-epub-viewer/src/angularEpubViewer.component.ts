@@ -62,8 +62,14 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         page: null
     };
 
+    /**
+     * Shows whenever document is ready
+     */
     documentReady: boolean = false;
 
+    /**
+     * Shows whenever pagination is computing
+     */
     computingPagination: boolean = false;
 
     /**
