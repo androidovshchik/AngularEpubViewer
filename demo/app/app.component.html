@@ -31,14 +31,13 @@
     </fieldset>
     <fieldset>
         <p>Pagination</p>
-        <input [disabled]="lockPagination" style="padding: 4px 0;" class="element" type="range" min="1" max="100" value="0">
         <button class="button" (click)="epubViewer.previousPage()">
             <i class="fa fa-arrow-left fa-lg"></i>
         </button>
         <button class="button" (click)="epubViewer.nextPage()">
             <i class="fa fa-arrow-right fa-lg"></i>
         </button>
-        {{ currentPage }} / {{ totalPages }}
+        <p style="margin-top: 8px;">{{ currentPage }} / {{ totalPages }}</p>
     </fieldset>
     <fieldset>
         <p>Table of contents</p>

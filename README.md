@@ -129,7 +129,7 @@ Fields:
 | `root: ElementRef` | Root container's DOM reference |
 | `currentLocation: EpubLocation` | Current location of document's rendered part |
 | `documentReady: boolean` | Indicates whenever document is ready |
-| `chapterDisplayed: boolean` | Indicates whenever chapter is displayed |
+| `isChapterDisplayed: boolean` | Indicates whenever chapter is displayed |
 | `computingPagination: boolean` | Indicates whenever pagination is computing |
 | `searchingText: boolean` | Indicates whenever searching text |
 

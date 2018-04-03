@@ -41,8 +41,8 @@ export interface EpubMetadata {
 export enum EpubError {
     OPEN_FILE,
     READ_FILE,
-    DOCUMENT_READY,
-    CHAPTER_DISPLAYED,
+    NOT_LOADED_DOCUMENT,
+    NOT_DISPLAYED_CHAPTER,
     SEARCH,
     COMPUTE_PAGINATION,
     LOAD_METADATA,

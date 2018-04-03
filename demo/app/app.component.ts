@@ -128,7 +128,7 @@ export class AppComponent implements OnInit {
     }
 
     onSearchPrinted() {
-        if (this.epubViewer.documentReady && this.epubViewer.chapterDisplayed &&
+        if (this.epubViewer.documentReady && this.epubViewer.isChapterDisplayed &&
             this.searchText && this.searchText.trim().length > 0) {
             this.lockSearch = true;
             this.epubViewer.searchText(this.searchText);
@@ -175,10 +175,10 @@ export class AppComponent implements OnInit {
                 this.lockTOC = false;
                 alert('Error while reading file');
                 break;
-            case EpubError.DOCUMENT_READY:
+            case EpubError.NOT_LOADED_DOCUMENT:
                 alert('Error while accessing unloaded document');
                 break;
-            case EpubError.CHAPTER_DISPLAYED:
+            case EpubError.NOT_DISPLAYED_CHAPTER:
                 alert('Error while accessing not displayed chapter');
                 break;
             case EpubError.SEARCH:
