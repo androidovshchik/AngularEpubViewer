@@ -23,7 +23,7 @@
         <input [disabled]="lockDocumentChoose" style="margin-bottom: 4px;" #picker type="file"
                accept="application/epub+zip" (change)="openFile($event)">
         <p>Select unzipped epub document</p>
-        <select class="element" [(ngModel)]="chosenDocument" (change)="onSelectedBook()">
+        <select [disabled]="lockDocumentChoose" class="element" [(ngModel)]="chosenDocument" (change)="onSelectedBook()">
             <option *ngFor="let book of unzippedBooks" [ngValue]="book">
                 {{ book.name }}
             </option>
@@ -31,13 +31,16 @@
     </fieldset>
     <fieldset>
         <p>Pagination</p>
-        <button class="button" (click)="epubViewer.previousPage()">
+        <button [disabled]="lockPagination" class="button" (click)="epubViewer.previousPage()">
             <i class="fa fa-arrow-left fa-lg"></i>
         </button>
-        <button class="button" (click)="epubViewer.nextPage()">
+        <button [disabled]="lockPagination" class="button" (click)="epubViewer.nextPage()">
             <i class="fa fa-arrow-right fa-lg"></i>
         </button>
-        <p style="margin-top: 8px;">{{ currentPage }} / {{ totalPages }}</p>
+        <p>Page: {{ epubViewer.currentLocation.page ? epubViewer.currentLocation.page : 0 }} of {{ totalPages }}</p>
+        <p>Start CFI: {{ epubViewer.currentLocation.startCfi ? epubViewer.currentLocation.startCfi : 'unknown' }}</p>
+        <p>End CFI: {{ epubViewer.currentLocation.endCfi ? epubViewer.currentLocation.endCfi : 'unknown' }}</p>
+        <p #chapter></p>
     </fieldset>
     <fieldset>
         <p>Table of contents</p>

@@ -454,6 +454,12 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         this.needSearchText = null;
         this.computingPagination = false;
         this.needComputePagination = false;
+        this.currentLocation = {
+            startCfi: null,
+            endCfi: null,
+            page: null,
+            chapter: null
+        };
         if (this.epub) {
             this.epub.destroy();
             this.epub = null;
