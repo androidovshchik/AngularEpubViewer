@@ -56,7 +56,11 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     /**
      * Current location of document's rendered part
      */
-    location: EpubLocation = null;
+    location: EpubLocation = {
+        startCfi: null,
+        endCfi: null,
+        page: null
+    };
 
     documentReady: boolean = false;
 
@@ -169,6 +173,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
             this.onChapterUnloaded.next(null);
         });
         this.epub.on('renderer:chapterDisplayed', (chapter: EpubChapter) => {
+            chapter['label'] = null;
             this.onChapterDisplayed.next(chapter);
         });
         this.epub.on('renderer:resized', () => {
@@ -179,10 +184,8 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         });
         this.epub.on('renderer:visibleRangeChanged', range => {
             // renderer:locationChanged is a part of this event
-            this.location = {
-                startCfi: range.start,
-                endCfi: range.end
-            };
+            this.location.startCfi = range.start;
+            this.location.endCfi = range.end;
             this.onLocationFound.next(this.location);
         });
         this.epub.renderTo('angularEpubViewerComponent');
@@ -329,6 +332,8 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                             this.computePagination();
                         } else {
                             this.onPaginationComputed.next(pages);
+                            this.location.page = this.epub.pagination.pageFromCfi(this.epub.getCurrentLocationCfi());
+                            this.onLocationFound.next(this.location);
                         }
                     });
                 })
@@ -389,6 +394,8 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
 
     private destroyEpub() {
         this.documentReady = false;
+        this.computingPagination = false;
+        this.needComputePagination = false;
         if (this.epub) {
             this.epub.destroy();
             this.epub = null;
