@@ -56,7 +56,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     /**
      * Current location of document's rendered part
      */
-    location: EpubLocation = {
+    currentLocation: EpubLocation = {
         startCfi: null,
         endCfi: null,
         page: null
@@ -169,6 +169,12 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
                 this.loadTOC();
             }
         });
+        this.epub.on('book:pageChanged', (location) => {
+            if (!this.computingPagination) {
+                this.currentLocation.page = location.anchorPage;
+                this.onLocationFound.next(this.currentLocation);
+            }
+        });
         this.epub.on('renderer:chapterUnloaded', () => {
             this.onChapterUnloaded.next(null);
         });
@@ -184,9 +190,9 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         });
         this.epub.on('renderer:visibleRangeChanged', range => {
             // renderer:locationChanged is a part of this event
-            this.location.startCfi = range.start;
-            this.location.endCfi = range.end;
-            this.onLocationFound.next(this.location);
+            this.currentLocation.startCfi = range.start;
+            this.currentLocation.endCfi = range.end;
+            this.onLocationFound.next(this.currentLocation);
         });
         this.epub.renderTo('angularEpubViewerComponent');
     };
@@ -326,14 +332,15 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         this.zone.runOutsideAngular(() => {
             this.epub.generatePagination()
                 .then((pages: EpubPage[]) => {
+                    const currentPage = this.epub.pagination.pageFromCfi(this.epub.getCurrentLocationCfi());
                     this.zone.run(() => {
                         this.computingPagination = false;
                         if (this.needComputePagination) {
                             this.computePagination();
                         } else {
                             this.onPaginationComputed.next(pages);
-                            this.location.page = this.epub.pagination.pageFromCfi(this.epub.getCurrentLocationCfi());
-                            this.onLocationFound.next(this.location);
+                            this.currentLocation.page = currentPage;
+                            this.onLocationFound.next(this.currentLocation);
                         }
                     });
                 })

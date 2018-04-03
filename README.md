@@ -126,6 +126,8 @@ Fields:
 | `epub: ePub` | Primary object |
 | `root: ElementRef` | Root container's DOM reference |
 | `location: EpubLocation` | Current location of document's rendered part |
+| `documentReady: boolean` | Shows whenever document is ready |
+| `computingPagination: boolean` | Shows whenever pagination is computing |
 
 Input parameters:
 
