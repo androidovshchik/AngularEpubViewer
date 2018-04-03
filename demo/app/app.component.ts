@@ -93,7 +93,7 @@ export class AppComponent implements OnInit {
     onChapterDisplayed(chapter: EpubChapter) {
         console.log('event:onChapterDisplayed');
         this.lockSearch = false;
-        this.lockPagination = false;
+        this.lockPagination = this.totalPages <= 0;
         this.onSearchPrinted();
     }
 
@@ -103,6 +103,7 @@ export class AppComponent implements OnInit {
 
     onPaginationComputed(pages: EpubPage[]) {
         console.log('event:onPaginationComputed');
+        this.lockPagination = false;
         this.totalPages = pages.length;
     }
 

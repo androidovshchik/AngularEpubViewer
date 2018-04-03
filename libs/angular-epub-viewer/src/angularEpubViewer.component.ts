@@ -176,47 +176,62 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         this.destroyEpub();
         this.epub = ePub(properties);
         this.epub.on('book:ready', () => {
-            this.documentReady = true;
-            this.onDocumentReady.next(null);
-            if (this.autoMetadata) {
-                this.loadMetadata();
-            }
-            if (this.autoTOC) {
-                this.loadTOC();
-            }
+            this.zone.run(() => {
+                this.documentReady = true;
+                this.onDocumentReady.next(null);
+                if (this.autoPagination) {
+                    this.needComputePagination = true;
+                }
+                if (this.autoMetadata) {
+                    this.loadMetadata();
+                }
+                if (this.autoTOC) {
+                    this.loadTOC();
+                }
+            });
         });
         this.epub.on('book:pageChanged', (location) => {
-            if (!this.computingPagination) {
-                this.currentLocation.page = location.anchorPage;
-                this.onLocationFound.next(this.currentLocation);
-            }
+            this.zone.run(() => {
+                if (!this.computingPagination) {
+                    this.currentLocation.page = location.anchorPage;
+                    this.onLocationFound.next(this.currentLocation);
+                }
+            });
         });
         this.epub.on('renderer:chapterUnloaded', () => {
-            this.isChapterDisplayed = false;
-            this.onChapterUnloaded.next(null);
+            this.zone.run(() => {
+                this.isChapterDisplayed = false;
+                this.onChapterUnloaded.next(null);
+            });
         });
         this.epub.on('renderer:chapterDisplayed', (chapter: EpubChapter) => {
-            this.isChapterDisplayed = true;
-            // no label attribute here
-            chapter['label'] = null;
-            this.onChapterDisplayed.next(chapter);
-            this.currentLocation.chapter = chapter;
-            this.onLocationFound.next(this.currentLocation);
-            if (this.autoPagination) {
-                this.computePagination();
-            }
+            this.zone.run(() => {
+                this.isChapterDisplayed = true;
+                // no label attribute here
+                chapter['label'] = null;
+                this.onChapterDisplayed.next(chapter);
+                this.currentLocation.chapter = chapter;
+                this.onLocationFound.next(this.currentLocation);
+                if (this.needComputePagination) {
+                    this.computePagination();
+                }
+            });
         });
         this.epub.on('renderer:resized', () => {
-            this.needComputePagination = true;
-            if (this.isChapterDisplayed && this.autoPagination) {
-                this.computePagination();
-            }
+            this.zone.run(() => {
+                this.needComputePagination = true;
+                if (this.autoPagination) {
+                    this.computePagination();
+                }
+            });
         });
         this.epub.on('renderer:visibleRangeChanged', range => {
-            // renderer:locationChanged is a part of this event
-            this.currentLocation.startCfi = range.start;
-            this.currentLocation.endCfi = range.end;
-            this.onLocationFound.next(this.currentLocation);
+            this.zone.run(() => {
+                // renderer:locationChanged is a part of this event
+                this.currentLocation.startCfi = range.start;
+                this.currentLocation.endCfi = range.end;
+                this.onLocationFound.next(this.currentLocation);
+            });
         });
         this.epub.renderTo('angularEpubViewerComponent');
     };
