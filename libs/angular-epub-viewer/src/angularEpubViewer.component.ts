@@ -79,6 +79,11 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     computingPagination: boolean = false;
 
     /**
+     * Indicates whenever searching text
+     */
+    searchingText: boolean = false;
+
+    /**
      * Root container's padding in px, em, etc.
      */
     @Input()
@@ -150,6 +155,8 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      */
     private _link: BehaviorSubject<string> = new BehaviorSubject<string>(null);
     private linkSubscription: Subscription;
+
+    private needSearchText: string = null;
 
     private needComputePagination: boolean = false;
 
@@ -298,16 +305,32 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
      */
     searchText(text: string) {
         if (!this.documentReady) {
+            this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
             return;
         }
         if (!this.chapterDisplayed) {
             this.onErrorOccurred.emit(EpubError.CHAPTER_DISPLAYED);
             return;
         }
+        if (!text || text.trim().length <= 0) {
+            this.onErrorOccurred.emit(EpubError.SEARCH);
+            return;
+        }
+        if (this.searchingText) {
+            this.needSearchText = text;
+            return;
+        }
+        this.searchingText = true;
+        this.needSearchText = null;
         this.zone.runOutsideAngular(() => {
-            const results: EpubSearchResult[] = this.epub.currentChapter.find(text);
+            const results: EpubSearchResult[] = this.epub.currentChapter.find(text.trim());
             this.zone.run(() => {
-                this.onSearchFinished.next(results);
+                this.searchingText = false;
+                if (this.needSearchText) {
+                    this.searchText(this.needSearchText);
+                } else {
+                    this.onSearchFinished.next(results);
+                }
             });
         });
     }
@@ -426,9 +449,11 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
 
     private destroyEpub() {
         this.documentReady = false;
+        this.chapterDisplayed = false;
+        this.searchingText = false;
+        this.needSearchText = null;
         this.computingPagination = false;
         this.needComputePagination = false;
-        this.chapterDisplayed = false;
         if (this.epub) {
             this.epub.destroy();
             this.epub = null;

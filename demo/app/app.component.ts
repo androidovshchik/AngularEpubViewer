@@ -88,7 +88,10 @@ export class AppComponent implements OnInit {
 
     onChapterDisplayed(chapter: EpubChapter) {
         console.log('event:onChapterDisplayed');
-        this.epubViewer.searchText('a');
+        this.lockSearch = false;
+        if (this.searchText) {
+            this.epubViewer.searchText(this.searchText);
+        }
     }
 
     onLocationFound(location: EpubLocation) {
@@ -96,10 +99,6 @@ export class AppComponent implements OnInit {
         if (location.page) {
             this.currentPage = location.page;
         }
-    }
-
-    onSearchFinished(results: EpubSearchResult[]) {
-        console.log('event:onSearchFinished');
     }
 
     onPaginationComputed(pages: EpubPage[]) {
@@ -115,6 +114,18 @@ export class AppComponent implements OnInit {
             this.chosenChapter = this.chapters[0];
         }
         this.lockTOC = false;
+    }
+
+    onChapter() {
+        this.epubViewer.goTo(this.chosenChapter.cfi);
+    }
+
+    onSearchPrinted() {
+
+    }
+
+    onSearchFinished(results: EpubSearchResult[]) {
+        console.log('event:onSearchFinished');
     }
 
     onPaddingChosen() {
@@ -137,9 +148,6 @@ export class AppComponent implements OnInit {
     onErrorOccurred(error: EpubError) {
         console.log('event:onErrorOccurred');
         switch (error) {
-            case EpubError.DOCUMENT_READY:
-                alert('Error while accessing unloaded document');
-                break;
             case EpubError.OPEN_FILE:
                 this.lockDocumentChoose = false;
                 this.lockPagination = false;
@@ -151,6 +159,15 @@ export class AppComponent implements OnInit {
                 this.lockPagination = false;
                 this.lockTOC = false;
                 alert('Error while reading file');
+                break;
+            case EpubError.DOCUMENT_READY:
+                alert('Error while accessing unloaded document');
+                break;
+            case EpubError.CHAPTER_DISPLAYED:
+                alert('Error while accessing not displayed chapter');
+                break;
+            case EpubError.SEARCH:
+                alert('Error while searching text');
                 break;
             case EpubError.COMPUTE_PAGINATION:
                 this.lockPagination = false;
