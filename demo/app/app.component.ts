@@ -27,53 +27,59 @@ export class AppComponent implements OnInit {
 
     unzippedBooks: Book[] = [].concat(UNZIPPED_BOOKS);
     zippedBooks: Book[] = [].concat(ZIPPED_BOOKS);
-    chosenBook: Book = UNZIPPED_BOOKS[0];
+    chosenDocument: Book = UNZIPPED_BOOKS[0];
+
+    totalPages: number = 0;
+    currentPage: number = 0;
 
     chapters: EpubChapter[] = [];
     chosenChapter: EpubChapter = null;
 
+    searchText: string = null;
+
     fontSizes: string[] = [].concat(FONT_SIZES);
-    fontSize: string = this.fontSizes[2];
+    chosenFontSize: string = this.fontSizes[2];
 
     paddings: string[] = [].concat(PADDINGS);
-    padding: string = this.paddings[2];
+    chosenPadding: string = this.paddings[2];
 
-    lockAllGui: boolean = true;
+    lockDocumentChoose: boolean = true;
+    lockPagination: boolean = true;
+    lockTOC: boolean = true;
+    lockSearch: boolean = true;
 
     ngOnInit() {
-        // not in constructor because epubViewer wasn't initialized then
         this.onSelectedBook();
     }
 
+    onBookUnloaded() {
+        this.lockDocumentChoose = true;
+        this.lockPagination = true;
+        this.lockTOC = true;
+        this.lockSearch = true;
+        this.chapters = [];
+        this.chosenChapter = null;
+        this.metadata.nativeElement.innerHTML = '';
+    }
+
     onSelectedBook() {
-        this.lockAllGui = true;
+        this.onBookUnloaded();
         // removing picked file
         this.picker.nativeElement.value = null;
         // path will be translated to link
-        this.epubViewer.openLink(this.chosenBook.path);
+        this.epubViewer.openLink(this.chosenDocument.path);
     }
 
     openFile(event) {
-        this.lockAllGui = true;
+        this.onBookUnloaded();
         // removing selected book
-        this.chosenBook = null;
+        this.chosenDocument = null;
         this.epubViewer.openFile(event.target.files[0]);
     }
 
     onDocumentReady() {
         console.log('event:onDocumentReady');
-        this.epubViewer.setStyle('font-size', '16px');
-        /*const tocSubscription = this.epubViewer.getTableOfContents()
-            .subscribe((chapters: EpubChapter[]) => {
-                //console.log(chapters);
-                this.chapters = [].concat(chapters);
-                if (this.chapters.length > 0) {
-                    this.chapter = this.chapters[0];
-                }
-                if (tocSubscription) {
-                    tocSubscription.unsubscribe();
-                }
-            });*/
+        this.epubViewer.setStyle('font-size', this.chosenFontSize);
     }
 
     onChapterUnloaded() {
@@ -87,7 +93,9 @@ export class AppComponent implements OnInit {
 
     onLocationFound(location: EpubLocation) {
         console.log('event:onLocationFound');
-        console.log(location);
+        if (location.page) {
+            this.currentPage = location.page;
+        }
     }
 
     onSearchFinished(results: EpubSearchResult[]) {
@@ -96,8 +104,27 @@ export class AppComponent implements OnInit {
 
     onPaginationComputed(pages: EpubPage[]) {
         console.log('event:onPaginationComputed');
-        // locking gui because we need in pagination in this demo and it requires extra calculation with time
-        this.lockAllGui = false;
+        this.lockPagination = false;
+        this.totalPages = pages.length;
+    }
+
+    onTOCLoaded(chapters: EpubChapter[]) {
+        console.log('event:onTOCLoaded');
+        this.chapters = [].concat(chapters);
+        if (this.chapters.length > 0) {
+            this.chosenChapter = this.chapters[0];
+        }
+        this.lockTOC = false;
+    }
+
+    onPaddingChosen() {
+        this.epubViewer.padding = this.chosenPadding;
+    }
+
+    onFontSizeChosen() {
+        if (this.epubViewer.documentReady) {
+            this.epubViewer.setStyle('font-size', this.chosenFontSize);
+        }
     }
 
     onMetadataLoaded(metadata: EpubMetadata) {
@@ -107,30 +134,33 @@ export class AppComponent implements OnInit {
             .replace(/ /g, '&nbsp;');
     }
 
-    onTOCLoaded(chapters: EpubChapter[]) {
-        console.log('event:onTOCLoaded');
-    }
-
     onErrorOccurred(error: EpubError) {
         console.log('event:onErrorOccurred');
-        this.lockAllGui = false;
         switch (error) {
             case EpubError.DOCUMENT_READY:
                 alert('Error while accessing unloaded document');
                 break;
             case EpubError.OPEN_FILE:
+                this.lockDocumentChoose = false;
+                this.lockPagination = false;
+                this.lockTOC = false;
                 alert('Error while opening file');
                 break;
             case EpubError.READ_FILE:
+                this.lockDocumentChoose = false;
+                this.lockPagination = false;
+                this.lockTOC = false;
                 alert('Error while reading file');
                 break;
             case EpubError.COMPUTE_PAGINATION:
+                this.lockPagination = false;
                 alert('Error while calculating pagination');
                 break;
             case EpubError.LOAD_METADATA:
                 alert('Error while loading metadata');
                 break;
             case EpubError.LOAD_TOC:
+                this.lockTOC = false;
                 alert('Error while loading table of contents');
                 break;
         }

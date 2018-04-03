@@ -13,17 +13,17 @@
 </main>
 <aside>
     <fieldset>
-        <p>Select compressed epub book</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chosenBook" (change)="onSelectedBook()">
+        <p>Select epub document</p>
+        <select [disabled]="lockDocumentChoose" class="element" [(ngModel)]="chosenDocument" (change)="onSelectedBook()">
             <option *ngFor="let book of zippedBooks" [ngValue]="book">
                 {{ book.name }}
             </option>
         </select>
-        <p style="margin-top: 4px;">Or pick compressed epub book</p>
-        <input [disabled]="lockAllGui" style="margin-bottom: 4px;" #picker type="file"
+        <p style="margin-top: 4px;">Pick epub document</p>
+        <input [disabled]="lockDocumentChoose" style="margin-bottom: 4px;" #picker type="file"
                accept="application/epub+zip" (change)="openFile($event)">
-        <p>Or select unzipped epub book</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chosenBook" (change)="onSelectedBook()">
+        <p>Select unzipped epub document</p>
+        <select class="element" [(ngModel)]="chosenDocument" (change)="onSelectedBook()">
             <option *ngFor="let book of unzippedBooks" [ngValue]="book">
                 {{ book.name }}
             </option>
@@ -31,35 +31,36 @@
     </fieldset>
     <fieldset>
         <p>Pagination</p>
-        <input [disabled]="lockAllGui" style="padding: 4px 0;" class="element" type="range" min="1" max="100" value="0">
-        <button [disabled]="lockAllGui" class="button" (click)="epubViewer.previousPage()">
+        <input [disabled]="lockPagination" style="padding: 4px 0;" class="element" type="range" min="1" max="100" value="0">
+        <button [disabled]="lockPagination" class="button" (click)="epubViewer.previousPage()">
             <i class="fa fa-arrow-left fa-lg"></i>
         </button>
-        <button [disabled]="lockAllGui" class="button" (click)="epubViewer.nextPage()">
+        <button [disabled]="lockPagination" class="button" (click)="epubViewer.nextPage()">
             <i class="fa fa-arrow-right fa-lg"></i>
         </button>
+        {{ currentPage }} / {{ totalPages }}
     </fieldset>
     <fieldset>
         <p>Table of contents</p>
-        <select [disabled]="lockAllGui" class="element" [(ngModel)]="chosenChapter">
+        <select [disabled]="lockTOC" class="element" [(ngModel)]="chosenChapter">
             <option *ngFor="let chapter of chapters" [ngValue]="chapter">
                 {{ chapter.label }}
             </option>
         </select>
     </fieldset>
     <fieldset style="margin-bottom: 16px;">
-        <p>Search text in current chapter</p>
-        <input class="element" type="text">
+        <p>Search <i>in current chapter</i></p>
+        <input [disabled]="lockSearch" class="element" type="text">
     </fieldset>
     <fieldset style="margin-bottom: 16px;">
         <p>Padding</p>
-        <select class="element" [(ngModel)]="padding">
+        <select class="element" [(ngModel)]="chosenPadding" (change)="onPaddingChosen()">
             <option *ngFor="let padding of paddings" [ngValue]="padding">
                 {{ padding }}
             </option>
         </select>
         <p>Font size</p>
-        <select class="element" [(ngModel)]="fontSize">
+        <select class="element" [(ngModel)]="chosenFontSize" (change)="onFontSizeChosen()">
             <option *ngFor="let fontSize of fontSizes" [ngValue]="fontSize">
                 {{ fontSize }}
             </option>
