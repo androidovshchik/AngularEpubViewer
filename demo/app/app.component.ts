@@ -33,9 +33,10 @@ export class AppComponent implements OnInit {
     currentPage: number = 0;
 
     chapters: EpubChapter[] = [];
-    chosenChapter: EpubChapter = null;
+    currentChapter: EpubChapter = null;
 
     searchText: string = null;
+    matchesCount: number = 0;
 
     fontSizes: string[] = [].concat(FONT_SIZES);
     chosenFontSize: string = this.fontSizes[2];
@@ -44,9 +45,9 @@ export class AppComponent implements OnInit {
     chosenPadding: string = this.paddings[2];
 
     lockDocumentChoose: boolean = true;
+    lockSearch: boolean = true;
     lockPagination: boolean = true;
     lockTOC: boolean = true;
-    lockSearch: boolean = true;
 
     ngOnInit() {
         this.onSelectedBook();
@@ -58,7 +59,7 @@ export class AppComponent implements OnInit {
         this.lockTOC = true;
         this.lockSearch = true;
         this.chapters = [];
-        this.chosenChapter = null;
+        this.currentChapter = null;
         this.metadata.nativeElement.innerHTML = '';
     }
 
@@ -89,13 +90,17 @@ export class AppComponent implements OnInit {
     onChapterDisplayed(chapter: EpubChapter) {
         console.log('event:onChapterDisplayed');
         this.lockSearch = false;
-        if (this.searchText) {
+        if (this.searchText && this.searchText.trim().length > 0) {
+            this.lockSearch = true;
             this.epubViewer.searchText(this.searchText);
         }
     }
 
     onLocationFound(location: EpubLocation) {
         console.log('event:onLocationFound');
+        if (location.chapter) {
+            this.currentChapter = location.chapter;
+        }
         if (location.page) {
             this.currentPage = location.page;
         }
@@ -110,22 +115,27 @@ export class AppComponent implements OnInit {
     onTOCLoaded(chapters: EpubChapter[]) {
         console.log('event:onTOCLoaded');
         this.chapters = [].concat(chapters);
-        if (this.chapters.length > 0) {
-            this.chosenChapter = this.chapters[0];
-        }
         this.lockTOC = false;
     }
 
     onChapter() {
-        this.epubViewer.goTo(this.chosenChapter.cfi);
+        if (this.epubViewer.documentReady) {
+            this.epubViewer.goTo(this.currentChapter.cfi);
+        }
     }
 
     onSearchPrinted() {
-
+        if (this.epubViewer.documentReady && this.epubViewer.chapterDisplayed &&
+            this.searchText && this.searchText.trim().length > 0) {
+            this.lockSearch = true;
+            this.epubViewer.searchText(this.searchText);
+        }
     }
 
     onSearchFinished(results: EpubSearchResult[]) {
         console.log('event:onSearchFinished');
+        this.lockSearch = false;
+        this.matchesCount = results.length;
     }
 
     onPaddingChosen() {
@@ -150,12 +160,14 @@ export class AppComponent implements OnInit {
         switch (error) {
             case EpubError.OPEN_FILE:
                 this.lockDocumentChoose = false;
+                this.lockSearch = false;
                 this.lockPagination = false;
                 this.lockTOC = false;
                 alert('Error while opening file');
                 break;
             case EpubError.READ_FILE:
                 this.lockDocumentChoose = false;
+                this.lockSearch = false;
                 this.lockPagination = false;
                 this.lockTOC = false;
                 alert('Error while reading file');
@@ -167,6 +179,7 @@ export class AppComponent implements OnInit {
                 alert('Error while accessing not displayed chapter');
                 break;
             case EpubError.SEARCH:
+                this.lockSearch = false;
                 alert('Error while searching text');
                 break;
             case EpubError.COMPUTE_PAGINATION:

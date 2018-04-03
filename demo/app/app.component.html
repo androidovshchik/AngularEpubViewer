@@ -42,7 +42,7 @@
     </fieldset>
     <fieldset>
         <p>Table of contents</p>
-        <select [disabled]="lockTOC" class="element" [(ngModel)]="chosenChapter" (change)="onChapter()">
+        <select [disabled]="lockTOC" class="element" [(ngModel)]="currentChapter" (change)="onChapter()">
             <option *ngFor="let chapter of chapters" [ngValue]="chapter">
                 {{ chapter.label }}
             </option>
@@ -51,7 +51,7 @@
     <fieldset style="margin-bottom: 16px;">
         <p>Search <i>in current chapter</i></p>
         <input [disabled]="lockSearch" class="element" type="text" [(ngModel)]="searchText" (change)="onSearchPrinted()">
-        <div style="margin-bottom: 16px;">0 matches</div>
+        <div style="margin-bottom: 16px;">{{ matchesCount }} matches</div>
     </fieldset>
     <fieldset style="margin-bottom: 16px;">
         <p>Padding</p>
