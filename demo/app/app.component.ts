@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
     chosenDocument: Book = UNZIPPED_BOOKS[0];
 
     totalPages: number = 0;
-    currentPage: number = 0;
 
     chapters: EpubChapter[] = [];
     chosenChapter: EpubChapter = null;
@@ -58,7 +57,6 @@ export class AppComponent implements OnInit {
         this.lockSearch = true;
         this.lockPagination = true;
         this.lockTOC = true;
-        this.currentPage = 0;
         this.totalPages = 0;
         this.chapters = [];
         this.chosenChapter = null;
@@ -101,14 +99,10 @@ export class AppComponent implements OnInit {
 
     onLocationFound(location: EpubLocation) {
         console.log('event:onLocationFound');
-        if (location.page) {
-            this.currentPage = location.page;
-        }
     }
 
     onPaginationComputed(pages: EpubPage[]) {
         console.log('event:onPaginationComputed');
-        this.lockPagination = false;
         this.totalPages = pages.length;
     }
 
@@ -132,6 +126,8 @@ export class AppComponent implements OnInit {
             this.searchText && this.searchText.trim().length > 0) {
             this.lockSearch = true;
             this.epubViewer.searchText(this.searchText);
+        } else {
+            this.matchesCount = 0;
         }
     }
 

@@ -40,7 +40,14 @@
         <p>Page: {{ epubViewer.currentLocation.page ? epubViewer.currentLocation.page : 0 }} of {{ totalPages }}</p>
         <p>Start CFI: {{ epubViewer.currentLocation.startCfi ? epubViewer.currentLocation.startCfi : 'unknown' }}</p>
         <p>End CFI: {{ epubViewer.currentLocation.endCfi ? epubViewer.currentLocation.endCfi : 'unknown' }}</p>
-        <p #chapter></p>
+        <p>Chapter CFI: {{ epubViewer.currentLocation.chapter && epubViewer.currentLocation.chapter.cfi ?
+            epubViewer.currentLocation.chapter.cfi : 'unknown' }}</p>
+        <p>Chapter href: {{ epubViewer.currentLocation.chapter && epubViewer.currentLocation.chapter.href ?
+            epubViewer.currentLocation.chapter.href : 'unknown' }}</p>
+        <p>Chapter label: {{ epubViewer.currentLocation.chapter && epubViewer.currentLocation.chapter.label ?
+            epubViewer.currentLocation.chapter.label : 'unknown' }}</p>
+        <p>Chapter spine position: {{ epubViewer.currentLocation.chapter && epubViewer.currentLocation.chapter.spinePos ?
+            epubViewer.currentLocation.chapter.spinePos : 'unknown' }}</p>
     </fieldset>
     <fieldset>
         <p>Table of contents</p>
