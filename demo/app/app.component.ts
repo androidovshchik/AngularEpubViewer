@@ -202,40 +202,32 @@ export class AppComponent implements OnInit {
 
 interface Book {
     path: string,
-    name: string,
-    unzipped: boolean
+    name: string
 }
 
 const UNZIPPED_BOOKS: Book[] = [{
     path: 'assets/books/alice/',
-    name: 'Alice',
-    unzipped: true
+    name: 'Alice'
 }, {
     path: 'assets/books/demo-book-gh-pages/',
-    name: 'Demo book',
-    unzipped: true
+    name: 'Demo book'
 }, {
     path: 'assets/books/mathjax_tests/',
-    name: 'MathJax',
-    unzipped: true
+    name: 'MathJax'
 }, {
     path: 'assets/books/moby-dick/',
-    name: 'Moby Dick',
-    unzipped: true
+    name: 'Moby Dick'
 }];
 
 const ZIPPED_BOOKS: Book[] = [{
     path: 'assets/books/georgia-cfi-20120521.epub',
-    name: 'Georgia',
-    unzipped: false
+    name: 'Georgia'
 }, {
     path: 'assets/books/mathjax_tests.epub',
-    name: 'MathJax',
-    unzipped: false
+    name: 'MathJax'
 }, {
     path: 'assets/books/moby-dick.epub',
-    name: 'Moby Dick',
-    unzipped: false
+    name: 'Moby Dick'
 }];
 
 const PADDINGS: string[] = [
