@@ -31,13 +31,13 @@
     </fieldset>
     <fieldset>
         <p>Pagination</p>
+        <p>Page: {{ epubViewer.currentLocation.page ? epubViewer.currentLocation.page : 0 }} of {{ totalPages }}</p>
         <button [disabled]="lockPagination" class="button" (click)="epubViewer.previousPage()">
             <i class="fa fa-arrow-left fa-lg"></i>
         </button>
         <button [disabled]="lockPagination" class="button" (click)="epubViewer.nextPage()">
             <i class="fa fa-arrow-right fa-lg"></i>
         </button>
-        <p>Page: {{ epubViewer.currentLocation.page ? epubViewer.currentLocation.page : 0 }} of {{ totalPages }}</p>
         <p>Start CFI: {{ epubViewer.currentLocation.startCfi ? epubViewer.currentLocation.startCfi : 'unknown' }}</p>
         <p>End CFI: {{ epubViewer.currentLocation.endCfi ? epubViewer.currentLocation.endCfi : 'unknown' }}</p>
         <p>Chapter CFI: {{ epubViewer.currentLocation.chapter && epubViewer.currentLocation.chapter.cfi ?

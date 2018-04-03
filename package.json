@@ -9,9 +9,8 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build --prod",
-    "docs": "typedoc libs/angular-epub-viewer/src/public_api.ts",
-    "deploy": "ng build --prod --output-path docs --base-href \"https://androidovshchik.github.io/AngularEpubViewer/\"",
-    "postdeploy": "npm run docs",
+    "deploy": "ng build --prod --output-path docs/dist --base-href \"https://androidovshchik.github.io/AngularEpubViewer/dist/\"",
+    "postdeploy": "typedoc libs/angular-epub-viewer/src/public_api.ts",
     "package": "ng-packagr -p ng-package.json",
     "release": "npm publish dist"
   },
