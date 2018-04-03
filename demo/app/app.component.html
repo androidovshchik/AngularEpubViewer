@@ -42,7 +42,7 @@
     </fieldset>
     <fieldset>
         <p>Table of contents</p>
-        <select [disabled]="lockTOC" class="element" [(ngModel)]="currentChapter" (change)="onChapter()">
+        <select [disabled]="lockTOC" class="element" [(ngModel)]="chosenChapter" (change)="onChapter()">
             <option *ngFor="let chapter of chapters" [ngValue]="chapter">
                 {{ chapter.label }}
             </option>

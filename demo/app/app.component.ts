@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     currentPage: number = 0;
 
     chapters: EpubChapter[] = [];
-    currentChapter: EpubChapter = null;
+    chosenChapter: EpubChapter = null;
 
     searchText: string = null;
     matchesCount: number = 0;
@@ -55,11 +55,13 @@ export class AppComponent implements OnInit {
 
     onBookUnloaded() {
         this.lockDocumentChoose = true;
+        this.lockSearch = true;
         this.lockPagination = true;
         this.lockTOC = true;
-        this.lockSearch = true;
+        this.currentPage = 0;
+        this.totalPages = 0;
         this.chapters = [];
-        this.currentChapter = null;
+        this.chosenChapter = null;
         this.metadata.nativeElement.innerHTML = '';
     }
 
@@ -80,27 +82,25 @@ export class AppComponent implements OnInit {
 
     onDocumentReady() {
         console.log('event:onDocumentReady');
+        this.lockDocumentChoose = false;
         this.epubViewer.setStyle('font-size', this.chosenFontSize);
     }
 
     onChapterUnloaded() {
         console.log('event:onChapterUnloaded');
+        this.lockSearch = true;
+        this.lockPagination = true;
     }
 
     onChapterDisplayed(chapter: EpubChapter) {
         console.log('event:onChapterDisplayed');
         this.lockSearch = false;
-        if (this.searchText && this.searchText.trim().length > 0) {
-            this.lockSearch = true;
-            this.epubViewer.searchText(this.searchText);
-        }
+        this.lockPagination = false;
+        this.onSearchPrinted();
     }
 
     onLocationFound(location: EpubLocation) {
         console.log('event:onLocationFound');
-        if (location.chapter) {
-            this.currentChapter = location.chapter;
-        }
         if (location.page) {
             this.currentPage = location.page;
         }
@@ -115,12 +115,15 @@ export class AppComponent implements OnInit {
     onTOCLoaded(chapters: EpubChapter[]) {
         console.log('event:onTOCLoaded');
         this.chapters = [].concat(chapters);
+        if (this.chapters.length > 0) {
+            this.chosenChapter = this.chapters[0];
+        }
         this.lockTOC = false;
     }
 
     onChapter() {
         if (this.epubViewer.documentReady) {
-            this.epubViewer.goTo(this.currentChapter.cfi);
+            this.epubViewer.goTo(this.chosenChapter.cfi);
         }
     }
 
