@@ -119,8 +119,6 @@ export class AppComponent {
 
 ### API reference
 
-[Detailed API documentation](https://androidovshchik.github.io/AngularEpubViewer/api)
-
 Fields:
 
 | Signature | Short Description |
