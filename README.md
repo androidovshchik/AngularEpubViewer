@@ -117,7 +117,7 @@ export class AppComponent {
 }
 ```
 
-### API reference
+### API documentation
 
 Fields:
 
