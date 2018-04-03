@@ -59,16 +59,22 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     currentLocation: EpubLocation = {
         startCfi: null,
         endCfi: null,
-        page: null
+        page: null,
+        chapter: null
     };
 
     /**
-     * Shows whenever document is ready
+     * Indicates whenever document is ready
      */
     documentReady: boolean = false;
 
     /**
-     * Shows whenever pagination is computing
+     * Indicates whenever chapter is displayed
+     */
+    chapterDisplayed: boolean = false;
+
+    /**
+     * Indicates whenever pagination is computing
      */
     computingPagination: boolean = false;
 
@@ -165,9 +171,6 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         this.epub.on('book:ready', () => {
             this.documentReady = true;
             this.onDocumentReady.next(null);
-            if (this.autoPagination) {
-                this.computePagination();
-            }
             if (this.autoMetadata) {
                 this.loadMetadata();
             }
@@ -182,15 +185,23 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
             }
         });
         this.epub.on('renderer:chapterUnloaded', () => {
+            this.chapterDisplayed = false;
             this.onChapterUnloaded.next(null);
         });
         this.epub.on('renderer:chapterDisplayed', (chapter: EpubChapter) => {
+            this.chapterDisplayed = true;
+            // no label attribute here
             chapter['label'] = null;
             this.onChapterDisplayed.next(chapter);
+            this.currentLocation.chapter = chapter;
+            this.onLocationFound.next(this.currentLocation);
+            if (this.autoPagination) {
+                this.computePagination();
+            }
         });
         this.epub.on('renderer:resized', () => {
             this.needComputePagination = true;
-            if (this.documentReady && this.autoPagination) {
+            if (this.chapterDisplayed && this.autoPagination) {
                 this.computePagination();
             }
         });
@@ -289,6 +300,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         if (!this.documentReady) {
             return;
         }
+        if (!this.chapterDisplayed) {
+            this.onErrorOccurred.emit(EpubError.CHAPTER_DISPLAYED);
+            return;
+        }
         this.zone.runOutsideAngular(() => {
             const results: EpubSearchResult[] = this.epub.currentChapter.find(text);
             this.zone.run(() => {
@@ -328,6 +343,10 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
     computePagination() {
         if (!this.documentReady) {
             this.onErrorOccurred.emit(EpubError.DOCUMENT_READY);
+            return;
+        }
+        if (!this.chapterDisplayed) {
+            this.onErrorOccurred.emit(EpubError.CHAPTER_DISPLAYED);
             return;
         }
         if (this.computingPagination) {
@@ -409,6 +428,7 @@ export class AngularEpubViewerComponent implements AfterViewInit, OnDestroy {
         this.documentReady = false;
         this.computingPagination = false;
         this.needComputePagination = false;
+        this.chapterDisplayed = false;
         if (this.epub) {
             this.epub.destroy();
             this.epub = null;

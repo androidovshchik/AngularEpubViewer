@@ -1,7 +1,8 @@
 export interface EpubLocation {
     startCfi: string,
     endCfi: string,
-    page: number
+    page: number,
+    chapter: EpubChapter
 }
 
 export interface EpubChapter {
@@ -39,6 +40,7 @@ export interface EpubMetadata {
 
 export enum EpubError {
     DOCUMENT_READY,
+    CHAPTER_DISPLAYED,
     OPEN_FILE,
     READ_FILE,
     COMPUTE_PAGINATION,

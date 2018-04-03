@@ -1,6 +1,6 @@
 {
   "name": "angular-epub-viewer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "GPLv3",
   "author": {
     "name": "Vlad Kalyuzhnyu",
@@ -9,11 +9,10 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build --prod",
-    "docs": "typedoc public_api.ts",
+    "docs": "typedoc libs/angular-epub-viewer/src/public_api.ts",
     "deploy": "ng build --prod --output-path docs --base-href \"https://androidovshchik.github.io/AngularEpubViewer/\"",
     "postdeploy": "npm run docs",
     "package": "ng-packagr -p ng-package.json",
-    "tag_release": "git push --follow-tags",
     "release": "npm publish dist"
   },
   "bugs": {
