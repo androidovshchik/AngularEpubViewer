@@ -17,6 +17,8 @@
 
 This is a simple epub viewer component for angular4+ websites.
 
+All issues and pull requests are welcome!
+
 ### Demo page
 
 [https://androidovshchik.github.io/AngularEpubViewer](https://androidovshchik.github.io/AngularEpubViewer)
@@ -24,9 +26,11 @@ This is a simple epub viewer component for angular4+ websites.
 ### Getting started
 
 ```
-npm install epubjs --save
+npm install epubjs0.2.x --save
 npm install angular-epub-viewer --save
 ```
+
+*(Actual version of the 2-nd branch for epub.js may be found [here](https://www.npmjs.com/package/epubjs))*
 
 Then add **required** `epub.js` script to your `.angular-cli.json`
 
@@ -135,7 +139,7 @@ Input parameters:
 
 | Signature | Default value | Short Description |
 | :------------- |:-------------|:-------------|
-| `padding: string` | `'16px'` | Root container's padding in px, em, etc |
+| `padding: string` | `null` | Root container's padding in px, em, etc |
 | `autoPagination: boolean` | `false` | Enables auto calculate of pagination after document is ready or viewport has been changed |
 | `autoMetadata: boolean` | `false` | Enables auto loading of metadata after document is ready |
 | `autoTOC: boolean` | `false` | Enables auto loading of table of contents after document is ready |
