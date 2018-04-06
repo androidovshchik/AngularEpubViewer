@@ -26,7 +26,7 @@ All issues and pull requests are welcome!
 ### Getting started
 
 ```
-npm install epubjs0.2.x --save
+npm install epubjs@0.2.x --save
 npm install angular-epub-viewer --save
 ```
 
