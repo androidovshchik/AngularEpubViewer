@@ -64,7 +64,11 @@ Optional scripts:
 >
 > includes [localForage.js library](https://github.com/localForage/localForage)
 
-Other plugins may be found [here](https://github.com/futurepress/epub.js/tree/master/hooks/extensions)
+Other official plugins may be found [here](https://github.com/futurepress/epub.js/tree/master/hooks/extensions)
+
+In folder `add-ons` are also available my own hooks, include them such way:
+
+`"../node_modules/angular-epub-viewer/add-ons/YOUR_CHOSEN_HOOK_NAME.js"`
 
 ### Supporting IE
 

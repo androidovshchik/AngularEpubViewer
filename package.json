@@ -12,6 +12,7 @@
     "docs": "typedoc libs/angular-epub-viewer/src/public_api.ts",
     "deploy": "ng build --prod --output-path docs --base-href \"https://androidovshchik.github.io/AngularEpubViewer/\"",
     "package": "ng-packagr -p ng-package.json",
+    "postpackage": "cp -R add-ons dist/add-ons && tar -cvzf dist.tgz -C dist .",
     "release": "npm publish dist"
   },
   "bugs": {
