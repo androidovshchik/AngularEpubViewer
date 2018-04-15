@@ -9,6 +9,7 @@ header {
 }
 
 main {
+    position: relative;
     height: calc(80% - 96px);
     width: 100%;
     background: #fafafa;
@@ -51,6 +52,23 @@ footer {
     width: 200px;
     margin-bottom: 16px;
     padding: 4px 8px;
+}
+
+#curtain {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: white;
+    opacity: 0.8;
+}
+
+#loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #subtitle {

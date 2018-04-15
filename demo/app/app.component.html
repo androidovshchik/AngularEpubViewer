@@ -10,6 +10,10 @@
                          (onMetadataLoaded)="onMetadataLoaded($event)" (onTOCLoaded)="onTOCLoaded($event)"
                          (onErrorOccurred)="onErrorOccurred($event)" #epubViewer>
     </angular-epub-viewer>
+    <ng-container *ngIf="lockPagination">
+        <div id="curtain"></div>
+        <i id="loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+    </ng-container>
 </main>
 <aside>
     <fieldset>
