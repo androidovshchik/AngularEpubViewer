@@ -20,9 +20,12 @@
       ],
       "scripts": [
         "../node_modules/epubjs/build/epub.js",
-        "../node_modules/epubjs/build/hooks.js",
         "../node_modules/epubjs/build/libs/localforage.min.js",
-        "../node_modules/epubjs/build/libs/zip.min.js"
+        "../node_modules/epubjs/build/libs/zip.min.js",
+        "../node_modules/epubjs/hooks/default/endnotes.js",
+        "../node_modules/epubjs/hooks/default/smartimages.js",
+        "../node_modules/epubjs/hooks/default/transculsions.js",
+        "../add-ons/mathml.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
